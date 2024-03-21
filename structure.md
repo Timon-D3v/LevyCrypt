@@ -1,0 +1,3 @@
+# Folder structure
+
+# Variable names
