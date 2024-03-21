@@ -1,0 +1,82 @@
+# Folder structure
+
+public / +
+ | css / +
+ | | global.css
+ | | style.css
+ | | {{sitename}}.css
+ | js / +
+ | | functions.js
+ | | constants.js
+ | | global.js
+ | | io.js
+ | | barba.js
+ | | gsap.js
+ | | chat.js
+ | | {{sitename}}.js
+ | img / -
+ | files / -
+database / +
+ | database.js
+ | backup / +
+ | | {{date}}_{{database name}}.json
+ | setup/ +
+ | | {{number (3 dig)}}_{{database name}}.sql
+components / +
+ | functions.js
+ | constants.js
+ | routes.js
+ | events.js
+views / +
+ | index.ejs
+ | chat.ejs
+ | login.ejs
+ | settings.ejs
+ | snippets / +
+ | | head.ejs
+ | | nav.ejs
+ | | header.ejs
+ | | footer.ejs
+ | | chat.ejs
+ | | contacts.ejs
+node_modules / -
+app.js
+README.md
+package.json
+package-lock.json
+LICENSE
+.gitignore
+_guidance.txt
+
+
+
+# Content
+global.css
+    Basic styles. This includes repeating sets like a class named "text" or "title".
+    This file should be very tiny.
+style.css
+    All other styles except one-page-styles. These inculde all styles for the nav, header and footer.
+{{sitename}}.css
+    One-page styles.
+functions.js
+    Global functions that are used across multiple sites.
+    This includes functions like toBase64().
+constants.js
+    Global constant that are used across multiple sites.
+    These inculde for example elements from the nav.
+global.js
+    Global javascript file. This includes tasks like setting up event listeners.
+    The structure should be like this:
+        - Define variables
+        - Execute one time code.
+        - Set up functions
+        - Set up event listeners only passing a functions
+
+
+
+# Variable names
+All variable names should be written as a whole word.
+If the variable contains two words, then the space should be replaced with a underscore.
+Constants should be written all capital.
+Functions should be defined as arrow functions in a constant.
+Functions should be named as a small description and with capital letters every new word starts. 
