@@ -51,6 +51,9 @@ _guidance.txt
 
 
 # Content
+
+public / +
+    All files that should be served.
 global.css
     Basic styles. This includes repeating sets like a class named "text" or "title".
     This file should be very tiny.
@@ -68,13 +71,48 @@ global.js
     Global javascript file. This includes tasks like setting up event listeners.
     The structure should be like this:
         - Define variables
-        - Execute one time code.
+        - Execute one time code
         - Set up functions
-        - Set up event listeners only passing a functions
+        - Set up event listeners while only passing in fucntions that are already declared
+io.js
+    Front-end socket file. Same structure as global.js.
+barba.js
+    All barba transitions. Same structure as global.js.
+gsap.js
+    Declare gsap functions as normal functions. Same structure as global.js.
+chat.js
+    All chat related javascript. Same structure as global.js.
+{{sitename}}.js
+    One-page javascript. Same structure as global.js.
+img / +
+    All static images.
+files / +
+    All static files that are not images.
+database.js
+    All queries to the database are sent from here.
+database/backup / +
+    Is in the .gitignore. Stores backups of the database.
+database/setup / +
+    SQL statements to create all databases.
+components/functions.js
+    Every function that is used in the backend files.
+components/constants.js
+    Constants for the backend files.
+routes.js
+    Here are all the routes managed.
+events.js
+    Backend for the socket.io websocket.
+views / +
+    All ejs files.
+/views/snippets / +
+    Repetetive code snippets for the normal ejs files.
+app.js
+    The running the server. Exports app as default.
 
 
 
 # Variable names
+
 All variable names should be written as a whole word.
 If the variable contains two words, then the space should be replaced with a underscore.
 Constants should be written all capital.
