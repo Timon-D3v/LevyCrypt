@@ -108,7 +108,7 @@ io.on("connection", ioConnect);
 
 
 if (ENVIRONMENT === "prod") {
-    const https_server = https.createServer(HTTPS_CERT, server)
+    const https_server = https.createServer(HTTPS_CERT, server);
     https_server.listen(PORT, () => console.log("\x1b[34m%s\x1b[0m", `HTTPS Server running on http://localhost:${PORT}`));
 } else {
     server.listen(PORT, () => console.log("\x1b[35m%s\x1b[0m", `Dev Server running on http://localhost:${PORT}`));

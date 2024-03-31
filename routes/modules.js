@@ -23,4 +23,8 @@ router.get("/gsap", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../node_modules/gsap/dist/gsap.js"));
 });
 
+router.get("/crypto", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../components/crypto.min.js"));
+});
+
 export default router;
