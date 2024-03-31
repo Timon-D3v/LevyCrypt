@@ -41,6 +41,7 @@ views / +
  | | contacts.ejs
 node_modules / -
 app.js
+.env
 README.md
 package.json
 package-lock.json
@@ -117,4 +118,15 @@ All variable names should be written as a whole word.
 If the variable contains two words, then the space should be replaced with a underscore.
 Constants should be written all capital.
 Functions should be defined as arrow functions in a constant.
-Functions should be named as a small description and with capital letters every new word starts. 
+Functions should be named as a small description and with capital letters every new word starts.
+
+
+
+# Styles
+
+Variables for every color with different shades and opacitys.
+There should be a color for the text and background plus three different colors.
+For messures use pixels, vw/vh and %.
+For responsive layout use variables for every messure defined in the root.
+Media querys are used to set the variables in the root to a different value based on the width and height.
+Also use clamp() for most things. (Ex. clamp(20px, 3vw + 10px, 100px))
