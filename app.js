@@ -1,3 +1,4 @@
+// Packages
 import session from "express-session";
 import bodyParser from "body-parser";
 import express from "express";
@@ -12,11 +13,11 @@ import * as socket from "socket.io";
 
 // Custom components
 import functions from "./components/functions.js";
+import ioConnect from "./components/events.js";
 
 // Routes
 import routeRoot from "./routes/root.js";
 import routeModules from "./routes/modules.js";
-import exp from "constants";
 
 
 
@@ -30,19 +31,27 @@ const HTTPS_CERT = {
 const PORT = ENVIRONMENT === "prod" ? 443 : 8080;
 const app = express();
 const server = http.createServer(app);
-const io = new socket.Server(server);
+const io = new socket.Server(server, {
+    cors: "timondev.vip, localhost"
+});
 
 
 
 // Export constants
 export default {
     ENVIRONMENT: ENVIRONMENT,
-    PORT: PORT
+    PORT: PORT,
+    app: app,
+    server: server,
+    io: io
 };
 
 export {
     ENVIRONMENT,
-    PORT
+    PORT,
+    app,
+    server,
+    io
 };
 
 
@@ -94,6 +103,8 @@ app.use(cors());
 app.use("/components", routeModules);
 app.use("/", routeRoot);
 
+// Set up websocket
+io.on("connection", ioConnect);
 
 
 if (ENVIRONMENT === "prod") {
