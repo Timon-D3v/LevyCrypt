@@ -15,4 +15,12 @@ router.get("/threejs/addons/:folder/:file", (req, res) => {
     );
 });
 
+router.get("/barba", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../node_modules/@barba/core/dist/barba.umd.js"));
+});
+
+router.get("/gsap", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../node_modules/gsap/dist/gsap.js"));
+});
+
 export default router;

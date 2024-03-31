@@ -1,0 +1,36 @@
+<meta charset="utf-8">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E0BP9PGK6H"></script>
+<script type="text/javascript" src="/js/google.js"></script>
+<title><%= title %> | 3D-Chat</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="Owner" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
+<meta name="Manager" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
+<meta name="Developper" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
+<meta name="Homepage" content="https://www.timondev.vip">
+<meta name="Chatapp" content="https://chat.timondev.vip">
+<meta name="Created" content="<%= date.toString() %>">
+<meta name="description" content="<%= desc %>">
+<meta name="google" content="nositelinkssearchbox">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="<%= title %> | 3D-Chat">
+<meta property="og:url" content="https://chat.timondev.vip/<%= path %>">
+<meta property="og:description" content="<%= desc %>">
+<meta property="og:image" content="/img/logo.png">
+<meta property="og:image:type" content="image/png">
+<link rel="icon" type="image/png" href="/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="/css/style.css">
+<script type="importmap">
+    {
+        "imports": {
+            "three": "/components/threejs",
+            "three/addons/": "/components/threejs/addons/",
+            "@barba/core": "/components/barba",
+            "gsap": "/components/gsap"
+        }
+    }
+</script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/components/gsap"></script>
+<script type="text/javascript" src="/js/global.js" defer></script>

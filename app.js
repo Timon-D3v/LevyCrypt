@@ -16,6 +16,7 @@ import functions from "./components/functions.js";
 // Routes
 import routeRoot from "./routes/root.js";
 import routeModules from "./routes/modules.js";
+import exp from "constants";
 
 
 
@@ -30,6 +31,19 @@ const PORT = ENVIRONMENT === "prod" ? 443 : 8080;
 const app = express();
 const server = http.createServer(app);
 const io = new socket.Server(server);
+
+
+
+// Export constants
+export default {
+    ENVIRONMENT: ENVIRONMENT,
+    PORT: PORT
+};
+
+export {
+    ENVIRONMENT,
+    PORT
+};
 
 
 
