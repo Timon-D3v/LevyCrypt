@@ -1,10 +1,12 @@
 {
   "name": "chat-app",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "type": "module",
   "description": "This is a chat app for my final project. The goal is to create a chat app that has end-to-end encryption an where you can send and view 3d-models.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: No test set up.\" && exit 1"
+    "test": "echo \"Error: No test set up.\" && exit 1",
+    "dev": "npx nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,17 @@
   "bugs": {
     "url": "https://github.com/Timon-D3v/matura-chat-app/issues"
   },
-  "homepage": "https://github.com/Timon-D3v/matura-chat-app#readme"
+  "homepage": "https://github.com/Timon-D3v/matura-chat-app#readme",
+  "dependencies": {
+    "@barba/core": "^2.9.7",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "morgan": "^1.10.0",
+    "socket.io": "^4.7.5",
+    "three": "^0.163.0"
+  }
 }
