@@ -60,7 +60,7 @@ global.css
     Basic styles. This includes repeating sets like a class named "text" or "title".
     This file should be very tiny.
 style.css
-    All other styles except one-page-styles. These inculde all styles for the nav, header and footer.
+    All other styles except one-page-styles. These include all styles for the nav, header and footer.
 {{sitename}}.css
     One-page styles.
 functions.js
@@ -68,14 +68,14 @@ functions.js
     This includes functions like toBase64().
 constants.js
     Global constant that are used across multiple sites.
-    These inculde for example elements from the nav.
+    These include for example elements from the nav.
 global.js
     Global javascript file. This includes tasks like setting up event listeners.
     The structure should be like this:
         - Define variables
         - Execute one time code
         - Set up functions
-        - Set up event listeners while only passing in fucntions that are already declared
+        - Set up event listeners while only passing in functions that are already declared
 io.js
     Front-end socket file. Same structure as global.js.
 barba.js
@@ -107,7 +107,7 @@ events.js
 views / +
     All ejs files.
 /views/snippets / +
-    Repetetive code snippets for the normal ejs files.
+    Repetitive code snippets for the normal ejs files.
 app.js
     The running the server. Exports app as default.
 
@@ -125,9 +125,9 @@ Functions should be named as a small description and with capital letters every 
 
 # Styles
 
-Variables for every color with different shades and opacitys.
+Variables for every color with different shades and opacities.
 There should be a color for the text and background plus three different colors.
-For messures use pixels, vw/vh and %.
-For responsive layout use variables for every messure defined in the root.
-Media querys are used to set the variables in the root to a different value based on the width and height.
+For measures use pixels, vw/vh and %.
+For responsive layout use variables for every measure defined in the root.
+Media queries are used to set the variables in the root to a different value based on the width and height.
 Also use clamp() for most things. (Ex. clamp(20px, 3vw + 10px, 100px))
