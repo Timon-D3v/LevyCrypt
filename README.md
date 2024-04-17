@@ -1,4 +1,4 @@
-![Logo](https://ik.imagekit.io/timon/cdn/logo?updatedAt=1710793404927)
+![Logo](https://ik.imagekit.io/timon/cdn/logo?tr=h-100,w-100)
 
 
 # Matura Chat App
