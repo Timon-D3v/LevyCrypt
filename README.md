@@ -58,4 +58,4 @@ In conclusion, this project not only honed my technical skills but also deepened
 
 - [My Instagram](https://www.instagram.com/timon.dev/)
 
-- [My Discord)](https://discordapp.com/users/560914605145325596)
+- [My Discord](https://discordapp.com/users/560914605145325596)
