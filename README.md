@@ -1,4 +1,4 @@
-![Logo](https://ik.imagekit.io/timon/cdn/logo?updatedAt=1710793404927)
+![Logo](https://ik.imagekit.io/timon/cdn/logo?tr=h-100,w-100)
 
 
 # Matura Chat App
@@ -28,6 +28,7 @@ Ethical Considerations: I prioritized ethical considerations such as user consen
 ## Conclusion:
 
 In conclusion, this project not only honed my technical skills but also deepened my understanding of human interaction in digital spaces. By creating a chat application, I aimed to bridge distances and foster meaningful connections in an increasingly digitized world. This project reflects my passion for technology, design, and social dynamics, and I hope it contributes to the discourse on the role of digital communication in shaping modern society.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
@@ -57,4 +58,4 @@ In conclusion, this project not only honed my technical skills but also deepened
 
 - [My Instagram](https://www.instagram.com/timon.dev/)
 
-- [My Discord)](https://discordapp.com/users/560914605145325596)
+- [My Discord](https://discordapp.com/users/560914605145325596)
