@@ -12,7 +12,8 @@ router.get("/", (req, res) => {
         path: req.url,
         date: "Mon Apr 01 2024 00:20:31 GMT+0200 (Mitteleuropäische Sommerzeit)",
         title: "Home",
-        desc: "Das ist die Landeseite von Timons 3D-Chat-App."
+        desc: "Das ist die Landeseite von Timon's 3D-Chat-App.",
+        user: req.session.user
     });
 });
 

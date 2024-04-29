@@ -101,8 +101,11 @@ app.use(cors());
 
 
 // Set up routes
-app.use("/components", routeModules);
 app.use("/", routeRoot);
+app.use("/components", routeModules);
+
+app.get("*", (req, res) => res.status(404).redirect("/"));
+app.post("*", (req, res) => res.status(404).json({message: "Endpoint not found!"}))
 
 // Set up websocket
 io.on("connection", ioConnect);

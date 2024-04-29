@@ -1,22 +1,35 @@
 <!DOCTYPE html>
-<html lang="de-ch">
-<%- include("./snippets/head.ejs", {
-    title: title,
-    desc: desc
-}); %>
-<body>
-    <%- include("./snippets/header.ejs", {
+<html lang="de-ch" data-theme="default">
+    <%- include("./snippets/head.ejs", {
         title: title,
         desc: desc
     }); %>
-    <%- include("./snippets/nav.ejs", {
-        title: title,
-        desc: desc
-    }); %>
-    <main></main>
-    <%- include("./snippets/footer.ejs", {
-        title: title,
-        desc: desc
-    }); %>
-</body>
+    <body>
+        <header>
+            <a class="banner" href="/">
+                <img class="logo" src="/img/logo.jpg" alt="Logo" draggable="false">
+                <div class="banner-text">3D-Chat</div>
+            </a><%
+            if (user?.valid) { %>
+            <a class="user" href="/user">
+                <img class="profile-picture" src="<%= user.profile_picture %>" draggable="false">
+                <div class="username"></div>
+            </a><%
+            } else { %>
+            <button type="button" class="login-btn">
+                <span>Login</span>
+            </button><% }; %>
+        </header>
+        <main><%
+        if (user?.valid) { %>
+            <div class="chat-nav"></div><%
+        } else { %>
+            <div class="auth-wrapper">
+                <div class="login"></div>
+                <div class="sign-up"></div>
+            </div><% }; %>
+        </main>
+        <canvas id="threejs-bg"></canvas>
+        <script type="module" src="/js/home.three.js"></script>
+    </body>
 </html>

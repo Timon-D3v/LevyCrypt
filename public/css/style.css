@@ -1,0 +1,58 @@
+/* Global */
+
+.banner {
+    display: flex;
+    height: 100%;
+}
+
+.logo {
+    margin-left: 5vw;
+    padding: calc(var(--header-height) / 10);
+    box-sizing: border-box;
+    border-radius: calc(var(--header-height) / 5);
+}
+
+.banner-text {
+    margin-right: 5vw;
+    padding: calc(var(--header-height) / 10);
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    font-family: "Teko", monospace;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-950);
+}
+
+/* Desktop */
+
+@media screen and (min-width: 1200px) {
+    
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1199px) {
+    
+}
+
+/* Tablet */
+
+@media screen and (min-width: 750px) and (max-width: 999px) {
+    
+}
+
+@media screen and (min-width: 575px) and (max-width: 749px) {
+    
+}
+
+/* Mobile */
+
+@media screen and (max-width: 575px) {
+    
+}
+
+@media screen and (max-width: 260px) {
+    .banner-text {
+        font-size: 25px;
+        margin: 0;
+    }
+}

@@ -11,7 +11,7 @@ router.get("/threejs", (req, res) => {
 
 router.get("/threejs/addons/:folder/:file", (req, res) => {
     res.sendFile(
-        path.resolve(__dirname, `../node_modules/three/examples/jsm/${req.params.folder}/${req.params.file}.js`)
+        path.resolve(__dirname, `../node_modules/three/examples/jsm/${req.params.folder}/${req.params.file}`)
     );
 });
 
@@ -25,6 +25,14 @@ router.get("/gsap", (req, res) => {
 
 router.get("/crypto", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../components/crypto.min.js"));
+});
+
+router.get("/timonjs", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../node_modules/timonjs/lib/timon.js"));
+});
+
+router.get("/timonjs/module", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../node_modules/timonjs/lib/timon.module.mjs"));
 });
 
 export default router;

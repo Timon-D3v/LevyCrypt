@@ -1,95 +1,38 @@
-const toBase64 = file => {
-    return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onload = () => resolve(reader.result);
-		reader.onerror = reject;
-		reader.readAsDataURL(file);
-	});
-};
-
+/**
+ * Uploads an image to the ImageKit server.
+ * @param {string} base64 - The base64 encoded image data.
+ * @param {string} name - The name of the image file.
+ * @param {string} folder - The folder path where the image should be uploaded.
+ * @returns {Promise<Object>} - An object with the path of the uploaded image and the server response.
+ */
 const imagekitUpload = async (base64, name, folder) => {
-    let res;
-    imagekit.upload({
+  try {
+    const res = await new Promise((resolve, reject) => {
+      imagekit.upload({
         file: base64,
         fileName: name,
         folder: folder,
         useUniqueFileName: false
-    },
-    (err, result) => {
-        err ? res = err : res = result;
+      }, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
     });
-    return {
-        path: "https://ik.imagekit.io/zmt" + folder + name,
-        res: res
-    };
-};
 
-const randomId = () => {
-    let result = 'auto_';
-    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 27; i++) {
-        result += char.charAt(Math.floor(Math.random() * char.length));
-    };
-    return result;
-};
-
-const toRealDate = date => {
-	date = date.toString();
-	let time = date.slice(16, 24);
-	let day = date.slice(8, 10);
-	let year = date.slice(11, 15);
-	let month = date.slice(4, 7);
-	switch (month) {
-		case "Jan":
-			month = "Januar";
-			break;
-		case "Feb":
-			month = "Februar";
-			break;
-		case "Mar":
-			month = "März";
-			break;
-		case "Apr":
-			month = "April";
-			break;
-		case "May":
-			month = "Mai";
-			break;
-		case "Jun":
-			month = "Juni";
-			break;
-		case "Jul":
-			month = "Juli";
-			break;
-		case "Aug":
-			month = "August";
-			break;
-		case "Sep":
-			month = "September";
-			break;
-		case "Oct":
-			month = "Oktober";
-			break;
-		case "Nov":
-			month = "November";
-			break;
-		case "Dec":
-			month = "Dezember";
-			break;
-	};
-	return `${day}. ${month} ${year} um ${time}`;
+    const path = `https://ik.imagekit.io/timon${folder}${name}`;
+    return { path, res };
+  } catch (error) {
+    return { path: "", res: error };
+  }
 };
 
 export default {
-    toBase64: toBase64,
-    imagekitUpload: imagekitUpload,
-    randomId: randomId,
-    toRealDate: toRealDate
+    imagekitUpload: imagekitUpload
 };
 
 export {
-    toBase64,
-    imagekitUpload,
-    randomId,
-    toRealDate
+    imagekitUpload
 };
