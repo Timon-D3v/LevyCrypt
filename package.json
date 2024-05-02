@@ -36,6 +36,7 @@
     "express-session": "^1.18.0",
     "gsap": "^3.12.5",
     "morgan": "^1.10.0",
+    "mysql2": "^3.9.7",
     "socket.io": "^4.7.5",
     "three": "^0.163.0",
     "timonjs": "^0.0.5"

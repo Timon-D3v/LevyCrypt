@@ -1,3 +1,8 @@
+import crypto from "node:crypto";
+import db from "../database/database.js";
+
+
+
 /**
  * Uploads an image to the ImageKit server.
  * @param {string} base64 - The base64 encoded image data.
@@ -8,18 +13,18 @@
 const imagekitUpload = async (base64, name, folder) => {
   try {
     const res = await new Promise((resolve, reject) => {
-      imagekit.upload({
-        file: base64,
-        fileName: name,
-        folder: folder,
-        useUniqueFileName: false
-      }, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
+        imagekit.upload({
+            file: base64,
+            fileName: name,
+            folder: folder,
+            useUniqueFileName: false
+        }, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
     });
 
     const path = `https://ik.imagekit.io/timon${folder}${name}`;
@@ -27,6 +32,10 @@ const imagekitUpload = async (base64, name, folder) => {
   } catch (error) {
     return { path: "", res: error };
   }
+};
+
+const validateLogin = async (username, password_hash) => {
+    const password = db.getPasswordWithUsername(username);
 };
 
 export default {

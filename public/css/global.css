@@ -563,3 +563,11 @@ a, img, video, picture {
     -moz-user-drag: none;
     -o-user-drag: none;
 }
+
+.margin-top-0 {
+    margin-top: 0;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
