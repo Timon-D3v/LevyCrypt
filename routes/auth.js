@@ -8,10 +8,11 @@ const router = express.Router();
 router.post("/login", async (req, res) => {
     if (req.session?.user?.valid) return res.json({message: "Du bist schon eingeloggt.", valid: false});
     try {
-        const { username, password, redir } = req.body;
-        const valid = await functions.validateLogin(username, password);
+        const { username, password } = req.body;
+        const decryptedPassword = functions.decryptMessage(password, app.keys.privateKey);
+        const valid = await functions.validateLogin(username, decryptedPassword);
         if (valid) {
-
+            res.json({message: "Login successful", valid: true});
         } else {
             res.json({message: "Dein Passwort stimmt nicht mit dem Benutzername überein.", valid: false});
         };

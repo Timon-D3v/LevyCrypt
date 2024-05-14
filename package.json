@@ -1,6 +1,6 @@
 {
   "name": "chat-app",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "This is a chat app for my final project. The goal is to create a chat app that has end-to-end encryption an where you can send and view 3d-models.",
   "main": "app.js",
@@ -31,14 +31,14 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "ejs": "^3.1.9",
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "gsap": "^3.12.5",
     "morgan": "^1.10.0",
     "mysql2": "^3.9.7",
     "socket.io": "^4.7.5",
-    "three": "^0.163.0",
-    "timonjs": "^0.0.5"
+    "three": "^0.164.1",
+    "timonjs": "^0.0.9"
   }
 }

@@ -15,10 +15,13 @@ import * as socket from "socket.io";
 // Custom components
 import functions from "./components/functions.js";
 import ioConnect from "./components/events.js";
+import keys from "./components/keys.js";
+import db from "./database/database.js";
 
 // Routes
 import routeRoot from "./routes/root.js";
-import routeModules from "./routes/modules.js";
+import routeAuth from "./routes/auth.js";
+import routeSecurity from "./routes/security.js";
 
 
 
@@ -40,11 +43,12 @@ const io = new socket.Server(server, {
 
 // Export constants
 export default {
-    ENVIRONMENT: ENVIRONMENT,
-    PORT: PORT,
-    app: app,
-    server: server,
-    io: io
+    ENVIRONMENT,
+    PORT,
+    app,
+    server,
+    io,
+    keys
 };
 
 export {
@@ -52,7 +56,8 @@ export {
     PORT,
     app,
     server,
-    io
+    io,
+    keys
 };
 
 
@@ -68,7 +73,7 @@ app.use(morgan("[:date[web]] :status :method :url | :total-time[3]ms | :remote-a
 if (ENVIRONMENT === "prod") {
     let date = new Date().toLocaleDateString("en-US", {year: "2-digit", month: "2-digit", day: "2-digit"});
     date = date.slice(6, 8) + date.slice(3, 5) + date.slice(0, 2);
-    fs.writeFile(`./logs/log_${date}.log`, "", err => {throw new Error(err);});
+    fs.writeFile(`./logs/log_${date}.log`, "", err => {if (err) throw new Error(err);});
     app.use(morgan("[:date[web]] :status :method :url | :total-time[3]ms | :remote-addr | :http-version :referrer |", {
         stream: fs.createWriteStream(`./logs/log_${date}.log`, {flags: "w"})
     }));
@@ -102,7 +107,8 @@ app.use(cors());
 
 // Set up routes
 app.use("/", routeRoot);
-app.use("/components", routeModules);
+app.use("/auth", routeAuth);
+app.use("/security", routeSecurity);
 
 app.get("*", (req, res) => res.status(404).redirect("/"));
 app.post("*", (req, res) => res.status(404).json({message: "Endpoint not found!"}))

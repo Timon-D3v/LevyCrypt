@@ -103,6 +103,11 @@
     --c-accent-950-75: #0c0713bf;
     --c-accent-950-50: #0c071380;
     --c-accent-950-25: #0c071340;
+
+    --success: #40b959;
+    --info: #4286bd;
+    --error: #d61c35;
+
 }
 
 @media (prefers-color-scheme: light) {
