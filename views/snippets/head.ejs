@@ -1,12 +1,14 @@
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"><%
+    if (ENVIRONMENT === "prod") { %>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-E0BP9PGK6H"></script>
     <script type="text/javascript">
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-E0BP9PGK6H');
-    </script>
+    </script><% 
+    }; %>
     <title><%= title %> | 3D-Chat</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta name="Owner" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
@@ -18,7 +20,7 @@
     <meta name="google" content="nositelinkssearchbox">
     <meta name="robots" content="index,follow">
     <meta property="og:title" content="<%= title %> | 3D-Chat">
-    <meta property="og:url" content="https://timondev.com/<%= path %>">
+    <meta property="og:url" content="<%= ORIGIN + path %>">
     <meta property="og:description" content="<%= desc %>">
     <meta property="og:image" content="/img/logo.jpg">
     <meta property="og:image:type" content="image/jpg">

@@ -25,7 +25,7 @@ main {
     top: calc(var(--header-height) + 5%);
     left: 15%;
     width: 70%;
-    height: calc(100% - var(--header-height) * 2 - 10%);
+    min-height: calc(100% - var(--header-height) * 2 - 10%);
     border: 1px solid rgba(255, 255, 255, 0.63);
     border-radius: 20px;
     background: #ecf1f91a;
@@ -100,29 +100,65 @@ main {
     transition: 0.25s transform linear, 0.25s height linear 0.25s;
 }
 
+.auth-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
 .auth-title {
+    font-size: 2.5em;
     color: var(--text-950);
+    text-align: center;
+    text-decoration: underline;
 }
 
 .auth-input {
     transition: all 0.25s ease;
     height: 2.5em;
+    width: calc(50% - 4px);
+    min-width: 200px;
     padding: 0.5em 2em;
     box-sizing: border-box;
     font-size: large;
     font-family: "Titillium Web", sans-serif;
     border: 2px var(--background-950) solid;
     outline: none;
+    text-align: center;
     background-color: inherit;
     color: var(--text-950);
 }
 
-.auth-input:focus {
+label.auth-input {
+    width: auto;
+}
+
+.auth-input:focus,
+.auth-input:hover {
     border-color: var(--text-400);
 }
 
+.auth-input::placeholder,
+.auth-input::-webkit-input-placeholder {
+    color: var(--text-950);
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.auth-input:focus::placeholder,
+.auth-input:hover::placeholder,
+.auth-input:focus::-webkit-input-placeholder,
+.auth-input:hover::-webkit-input-placeholder,
+label.auth-input:focus,
+label.auth-input:hover {
+    color: var(--text-800);
+}
+
 .auth-button {
-    align-self: flex-end;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
     margin: 20px 0 10px 0;
     background-color: #151717;
     border: none;
@@ -130,7 +166,7 @@ main {
     font-size: 15px;
     font-weight: 500;
     border-radius: 10px;
-    width: 250px;
+    width: 75%;
     height: 50px;
     cursor: pointer;
 }

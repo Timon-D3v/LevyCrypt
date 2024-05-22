@@ -1,5 +1,20 @@
+import ImageKit from "imagekit";
 import crypto from "crypto";
+import dotenv from "dotenv";
+import path from "path";
 import db from "../database/database.js";
+import { randomString } from "timonjs";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+
+
+dotenv.config({path: path.resolve(dirname(fileURLToPath(import.meta.url)), "../.env")});
+const imagekit = new ImageKit({
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_SECRET_KEY,
+    urlEndpoint: "https://ik.imagekit.io/timon/"
+});
 
 
 
@@ -91,16 +106,66 @@ const decryptMessage = (encryptedMessage, privateKey) => {
     return decryptedMessage;
 };
 
+/**
+ * This function is used to sign up a new user by creating a user profile with the provided information.
+ * 
+ * @param {string} username - The username of the new user.
+ * @param {string} password - The password of the new user.
+ * @param {string} name - The first name of the new user.
+ * @param {string} family_name - The last name of the new user.
+ * @param {string} picture - The profile picture of the new user in base64 format.
+ * 
+ * @returns {boolean} - Returns true if the sign up is successful, false otherwise.
+ */
+const signUp = async (username, password, name, family_name, picture) => {
+    const array = [
+        username,
+        password,
+        name,
+        family_name
+    ];
+
+    if (typeof picture === "string" && picture !== "") {
+        const { path } = await imagekitUpload(
+            picture,
+            username + "__" + randomString(32),
+            "chat-app-2024/profile-picture"
+        );
+        array.push(path);
+    } else {
+        array.push("/img/svg/user.svg");
+    }
+
+    try {
+        array.forEach(element => {
+            if (typeof element !== "string" || element === "") {
+                throw new Error("Element does not match expected value!");
+            }
+        });
+    } catch (err) {
+        console.error(err.message);
+        return false;
+    }
+
+    const hash = await createPasswordHash(password);
+    array[1] = hash;
+
+    const valid = await db.createUserProfile(array);
+    return valid;
+};
+
 export default {
     imagekitUpload,
     createPasswordHash,
     validateLogin,
-    decryptMessage
+    decryptMessage,
+    signUp
 };
 
 export {
     imagekitUpload,
     createPasswordHash,
     validateLogin,
-    decryptMessage
+    decryptMessage,
+    signUp
 };

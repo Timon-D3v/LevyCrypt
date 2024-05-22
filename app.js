@@ -4,19 +4,16 @@ import bodyParser from "body-parser";
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import https from "https";
 import timon from "timonjs";
+import https from "https";
 import http from "http";
 import cors from "cors";
 import fs from "fs";
-import crypto from "crypto";
 import * as socket from "socket.io";
 
 // Custom components
-import functions from "./components/functions.js";
 import ioConnect from "./components/events.js";
 import keys from "./components/keys.js";
-import db from "./database/database.js";
 
 // Routes
 import routeRoot from "./routes/root.js";
@@ -36,7 +33,7 @@ const PORT = ENVIRONMENT === "prod" ? 443 : 8080;
 const app = express();
 const server = http.createServer(app);
 const io = new socket.Server(server, {
-    cors: "timondev.vip, localhost"
+    cors: "timondev.vip, localhost, timondev.com"
 });
 
 
