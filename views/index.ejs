@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="de-ch" data-theme="default">
     <%- include("./snippets/head.ejs", {
-        title: title,
-        desc: desc
+        title,
+        desc,
+        date,
+        ORIGIN,
+        path,
+        PORT,
+        ENVIRONMENT
     }); %>
     <body>
         <header>
@@ -25,26 +30,22 @@
             <div class="chat-nav"></div><%
         } else { %>
             <div class="auth-wrapper">
-                <div class="login">
+                <form class="login">
                     <h1 class="auth-title margin-top-0">Login</h1>
                     <input type="text" id="username" autocomplete="username" class="auth-input" placeholder="Benutzername">
-                    <input type="text" id="password" autocomplete="current-password" class="auth-input" placeholder="Passwort">
-                    <br>
-                    <button type="button" class="auth-button">Einloggen</button>
-                </div>
-                <div class="sign-up">
+                    <input type="password" id="password" autocomplete="current-password" class="auth-input" placeholder="Passwort">
+                    <button type="button" class="auth-button" id="login-btn">Einloggen</button>
+                </form>
+                <form class="sign-up">
                     <h1 class="auth-title">Registrieren</h1>
                     <input type="text" id="new-username" autocomplete="username" class="auth-input" placeholder="Benutzername">
-                    <input type="text" id="new-password" autocomplete="new-password" class="auth-input" placeholder="Passwort">
-                    <br>
+                    <input type="password" id="new-password" autocomplete="new-password" class="auth-input" placeholder="Passwort">
                     <input type="text" id="given-name" autocomplete="given-name" class="auth-input margin-top-10" placeholder="Vorname">
                     <input type="text" id="family-name" autocomplete="family-name" class="auth-input margin-top-10" placeholder="Nachname">
-                    <br>
-                    <input type="text" id="email" autocomplete="email" class="auth-input margin-top-10" placeholder="E-Mail">
-                    <input type="file" id="profile-picture" class="auth-input margin-top-10" placeholder="Profilbild" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
-                    <br>
-                    <button type="button" class="auth-button">Registrieren</button>
-                </div>
+                    <label style="display: block;" id="profile-picture-label" for="profile-picture" class="auth-input margin-top-10">Profilbild</label>
+                    <input style="display: none;" type="file" id="profile-picture" class="auth-input margin-top-10 big" placeholder="Profilbild" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
+                    <button type="button" class="auth-button" id="sign-up-btn">Registrieren</button>
+                </form>
             </div><% }; %>
         </main>
         <canvas id="threejs-bg"></canvas>

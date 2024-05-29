@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import timon from "timonjs";
+import timon, { ORIGIN } from "timonjs";
 
 /**
  * Creates a new Three.js scene with a camera and renderer.
@@ -40,7 +40,7 @@ scene.add(light);
 const loader = new GLTFLoader();
 let dna;
 loader.load(
-    "/models/dna.glb",
+    ORIGIN + "/models/dna.glb",
     obj => {
         dna = obj.scene;
         scene.add(dna);

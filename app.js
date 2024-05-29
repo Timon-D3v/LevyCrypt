@@ -4,21 +4,21 @@ import bodyParser from "body-parser";
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import https from "https";
 import timon from "timonjs";
+import https from "https";
 import http from "http";
 import cors from "cors";
 import fs from "fs";
-import crypto from "crypto";
 import * as socket from "socket.io";
 
 // Custom components
-import functions from "./components/functions.js";
 import ioConnect from "./components/events.js";
+import keys from "./components/keys.js";
 
 // Routes
 import routeRoot from "./routes/root.js";
-import routeModules from "./routes/modules.js";
+import routeAuth from "./routes/auth.js";
+import routeSecurity from "./routes/security.js";
 
 
 
@@ -48,11 +48,12 @@ const io = new socket.Server(server, {
 
 // Export constants
 export default {
-    ENVIRONMENT: ENVIRONMENT,
-    PORT: PORT,
-    app: app,
-    server: server,
-    io: io
+    ENVIRONMENT,
+    PORT,
+    app,
+    server,
+    io,
+    keys
 };
 
 export {
@@ -60,7 +61,8 @@ export {
     PORT,
     app,
     server,
-    io
+    io,
+    keys
 };
 
 
@@ -110,7 +112,8 @@ app.use(cors());
 
 // Set up routes
 app.use("/", routeRoot);
-app.use("/components", routeModules);
+app.use("/auth", routeAuth);
+app.use("/security", routeSecurity);
 
 app.get("*", (req, res) => res.status(404).redirect("/"));
 app.post("*", (req, res) => res.status(404).json({message: "Endpoint not found!"}))
