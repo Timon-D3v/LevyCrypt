@@ -24,17 +24,25 @@ import routeSecurity from "./routes/security.js";
 
 
 // Constants 
-const ENVIRONMENT = "dev" // || "prod"
-const HTTPS_CERT = {
-    key: fs.readFileSync("./cert/private.key.pem"),
-    cert: fs.readFileSync("./cert/domain.cert.pem"),
-    ca: fs.readFileSync("./cert/intermediate.cert.pem"),
-};
+const ENVIRONMENT = "prod" // || "prod"
+const CERT = ENVIRONMENT === "prod" ? {
+    COM: {
+        key: fs.readFileSync("./cert/com/private.key.pem"),
+        cert: fs.readFileSync("./cert/com/domain.crt.pem"),
+    },
+    VIP: {
+        key: fs.readFileSync("./cert/vip/private.key.pem"),
+        cert: fs.readFileSync("./cert/vip/domain.cert.pem"),
+        ca: fs.readFileSync("./cert/vip/intermediate.cert.pem"),
+    }
+} : undefined;
 const PORT = ENVIRONMENT === "prod" ? 443 : 8080;
 const app = express();
-const server = http.createServer(app);
+const server = ENVIRONMENT === "prod" ? https.createServer(CERT.COM, app) : http.createServer(app);
 const io = new socket.Server(server, {
-    cors: "timondev.vip, localhost, timondev.com"
+    cors: {
+        origin: ["https://timondev.vip", "https://localhost", "https://timondev.com", "https://www.timondev.vip", "https://www.timondev.com"],
+    }
 });
 const onlineUsers = [];
 
@@ -96,7 +104,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: false,
+        secure: ENVIRONMENT === "prod",
         maxAge: 432000000
     }
 }));
@@ -118,10 +126,13 @@ app.post("*", (req, res) => res.status(404).json({message: "Endpoint not found!"
 // Set up websocket
 io.on("connection", ioConnect);
 
-
-if (ENVIRONMENT === "prod") {
-    const https_server = https.createServer(HTTPS_CERT, server);
-    https_server.listen(PORT, () => console.log("\x1b[34m%s\x1b[0m", `HTTPS Server running on http://localhost:${PORT}`));
-} else {
-    server.listen(PORT, () => console.log("\x1b[35m%s\x1b[0m", `Dev Server running on http://localhost:${PORT}`));
-};
+server.listen(PORT, () => {
+    if (ENVIRONMENT === "prod") {
+        server.addContext("timondev.vip", CERT.VIP);
+        server.addContext("timondev.com", CERT.COM);
+        server.addContext("www.timondev.vip", CERT.VIP);
+        server.addContext("www.timondev.com", CERT.COM);
+    }
+    const protocol = ENVIRONMENT === "prod" ? "HTTPS" : "HTTP";
+    console.log(`\x1b[34m%s\x1b[0m`, `${protocol} Server running on ${protocol}://localhost:${PORT}`);
+});
