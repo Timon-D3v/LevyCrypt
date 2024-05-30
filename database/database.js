@@ -25,7 +25,7 @@ const schema = process.env.MYSQL_SCHEMA;
 const getPasswordWithUsername = async (username) => {
     try {
         const [ result ] = await pool.query(
-            `SELECT * from \`${schema}\`.\`users\` WHERE (username = ?);`,
+            `SELECT \`password\` from \`${schema}\`.\`users\` WHERE (username = ?);`,
             [username]
         );
         return result[0].password;
@@ -78,16 +78,33 @@ const getAllUsernames = async () => {
     }
 };
 
+const getAccountWithUsername = async (username) => {
+    try {
+        const [ result ] = await pool.query(
+            `SELECT * from \`${schema}\`.\`users\` WHERE (username = ?);`,
+            [username]
+        );
+        return result[0];
+    } catch (err) {
+        console.error(err.message);
+        return {
+            error: err.message
+        };
+    }
+};
+
 
 
 export default {
     getPasswordWithUsername,
     createUserProfile,
-    getAllUsernames
+    getAllUsernames,
+    getAccountWithUsername
 };
 
 export {
     getPasswordWithUsername,
     createUserProfile,
-    getAllUsernames
+    getAllUsernames,
+    getAccountWithUsername
 };

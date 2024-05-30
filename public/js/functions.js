@@ -8,13 +8,14 @@ import crypto from "./crypto.js";
  * @param {string} password - The password of the user trying to log in.
  */
 async function login(username, password) {
-    const decryptedPassword = await crypto.clientEncrypt(password);
+    const encryptedPassword = await crypto.clientEncrypt(password);
     const res = await post("/auth/login", {
         username,
-        password: decryptedPassword
+        password: encryptedPassword
     });
 
     if (res.valid) {
+        window.location.href += "chat";
         timon.successField("Du bist jetzt eingeloggt.", 1000);
     } else {
         timon.errorField(res.message);
@@ -38,16 +39,17 @@ async function signUp(username, password, name, family_name, picture_element) {
         console.info(err.message);
     }
 
-    const decryptedPassword = await crypto.clientEncrypt(password);
+    const encryptedPassword = await crypto.clientEncrypt(password);
     const res = await post("/auth/signUp", {
         username,
-        password: decryptedPassword,
+        password: encryptedPassword,
         name,
         family_name,
         picture
     });
 
     if (res.valid) {
+        window.location.href += "chat";
         timon.successField("Du hast dich erfolgreich registriert.", 1000);
     } else {
         timon.errorField(res.message);

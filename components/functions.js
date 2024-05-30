@@ -49,6 +49,12 @@ const imagekitUpload = async (base64, name, folder) => {
   }
 };
 
+/**
+ * Generates a salted and hashed password based on the provided password.
+ * 
+ * @param {string} password - The password to be hashed.
+ * @returns {string} - A string containing the salt and hashed password separated by a colon.
+ */
 const createPasswordHash = async (password) => {
     const salt = crypto.randomBytes(32).toString("base64");
     const hashedPassword = crypto.scryptSync(password, salt, 256).toString("base64");

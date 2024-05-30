@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="default">
+    <%- include("./snippets/head.ejs", {
+        title,
+        desc,
+        date,
+        ORIGIN,
+        path,
+        PORT,
+        ENVIRONMENT
+    }); %>
+    <body>
+        <%- include("./snippets/header.ejs", {
+            title,
+            ORIGIN,
+            path
+        }); %>
+        <%- include("./snippets/nav.ejs", {
+            title,
+            ORIGIN,
+            path
+        }); %>
+        <% if (chat.open) { %>
+        <%- includes("./snippets/chat-nav.ejs", {
+            title,
+            ORIGIN,
+            path
+        }); %><% 
+        } else { %>
+        <main>
+        </main><%
+        }; %>
+    </body>
+</html>

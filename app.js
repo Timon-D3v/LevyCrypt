@@ -18,6 +18,7 @@ import keys from "./components/keys.js";
 // Routes
 import routeRoot from "./routes/root.js";
 import routeAuth from "./routes/auth.js";
+import routeChat from "./routes/chat.js";
 import routeSecurity from "./routes/security.js";
 
 
@@ -35,6 +36,7 @@ const server = http.createServer(app);
 const io = new socket.Server(server, {
     cors: "timondev.vip, localhost, timondev.com"
 });
+const onlineUsers = [];
 
 
 
@@ -45,7 +47,8 @@ export default {
     app,
     server,
     io,
-    keys
+    keys,
+    onlineUsers
 };
 
 export {
@@ -54,7 +57,8 @@ export {
     app,
     server,
     io,
-    keys
+    keys,
+    onlineUsers
 };
 
 
@@ -105,10 +109,11 @@ app.use(cors());
 // Set up routes
 app.use("/", routeRoot);
 app.use("/auth", routeAuth);
+app.use("/chat", routeChat);
 app.use("/security", routeSecurity);
 
 app.get("*", (req, res) => res.status(404).redirect("/"));
-app.post("*", (req, res) => res.status(404).json({message: "Endpoint not found!"}))
+app.post("*", (req, res) => res.status(404).json({message: "Endpoint not found!"}));
 
 // Set up websocket
 io.on("connection", ioConnect);
