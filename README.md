@@ -1,9 +1,9 @@
-![Logo](https://ik.imagekit.io/timon/cdn/icon?tr=h-125,w-125)
+![Logo](https://ik.imagekit.io/timon/chat-app-2024/logo.png?tr=h-125,w-125)
 
 
-# Matura Chat App
+# Matura Chat App (LevyCrypt)
 
-My name is Timon Fiedler, a student at Kantonsschule Zürich Nord, currently enrolled in the M21d class. For my Matura project in the year 2024, I embarked on a journey to delve into the realm of digital communication and social interaction by creating a unique chat application. In this project, I aimed to not only develop a functional app but also to explore the underlying dynamics of human connection facilitated by technology.
+My name is Timon Fiedler, a student at Kantonsschule Zürich Nord, currently enrolled in the M21d class. For my Matura project in the year 2024/25, I embarked on a journey to delve into the realm of digital communication and social interaction by creating a unique chat application. In this project, I aimed to not only develop a functional app but also to explore the underlying dynamics of human connection facilitated by technology.
 
 
 ## Features
@@ -41,21 +41,44 @@ In conclusion, this project not only honed my technical skills but also deepened
 
 ## 🚀 About Me
 
-👋 Hi, I’m @Timon-D3v
+### Hi there! 👋 I'm Timon Fiedler
 
-👀 I’m interested in programming and volleyball.
+I'm a 17-year-old self-taught web developer with about one year of experience in building dynamic and responsive web applications.
 
-🌱 I’m currently learning html, js and css. (Front and backend)
+#### 🔧 Skills & Technologies:
+- **Languages**: JavaScript (Node.js), HTML, CSS
+- **Frameworks & Libraries**: Express.js, jQuery, Three.js, Node Crypto
+- **Tools**: My custom framework, Timon.js
+- **Databases**: MySQL
 
-📫 How to reach me: timon.dev.main@gmail.com
+#### 🌟 Featured Projects:
+- [**Zurich Meets Tanzania**](https://zurich-meets-tanzania.com) - A full-stack website for a non-profit association helping a hospital in Ifisi, Tanzania. Built with Express.js, MySQL, and Stripe for donations and subscriptions. The custom frontend features a blog, static pages, and user authentication.
+- [**Timon.js**](https://www.npmjs.com/package/timonjs) - My own JavaScript framework, created to extend the capabilities of jQuery and include frequently used functions like `getElm` for DOM manipulation and custom alert dialogs.
+- [**Personal Portfolio**](https://timondev.com) - My personal portfolio website showcasing my projects and skills, built with an Express.js backend and MySQL.
 
+#### 📚 Currently Learning:
+- Advanced JavaScript and Node.js Crypto
+- Exploring new frameworks and technologies
+
+#### 💬 Get in Touch:
+- **Email**: [info@timondev.com](mailto:info@timondev.com)
+- **Instagram**: [@timon.dev](https://www.instagram.com/timon.dev/)
+- **Discord**: [firezunami](https://discordapp.com/users/560914605145325596)
+- **Stack Overflow**: [Timon.dev](https://stackoverflow.com/users/22688455/timon-dev)
+
+#### 🎓 Interests:
+- Passionate about JavaScript and building custom frameworks
+- Enjoy building computers and servers
+- Volleyball enthusiast, playing as an outside hitter in the under 23 category
+
+Feel free to explore my repositories and reach out if you want to collaborate or have any questions!
+
+---
+
+![Profile Views](https://komarev.com/ghpvc/?username=timondev&color=green)
 
 ## 🔗 Links
 
-- [The Chat App](https://chat.timondev.vip)
+- [LevyCrypt](https://chat.timondev.com)
 
-- [My Portfolio](https://timondev.vip)
-
-- [My Instagram](https://www.instagram.com/timon.dev/)
-
-- [My Discord](https://discordapp.com/users/560914605145325596)
+- [My Portfolio](https://timondev.com)
