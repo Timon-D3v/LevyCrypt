@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
     res.render("index.ejs", {
         ENVIRONMENT: app.ENVIRONMENT,
         PORT: app.PORT,
-        ORIGIN: req.protocol + '://' + req.get('host'),
+        ORIGIN: req.protocol + "://" + req.get("host"),
         path: req.url,
         date: "Mon Apr 01 2024 00:20:31 GMT+0200 (Mitteleuropäische Sommerzeit)",
         title: "Home",

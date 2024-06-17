@@ -217,6 +217,10 @@
         --accent-950-50: #0c071380;
         --accent-950-25: #0c071340;
     }
+
+    :root[data-theme="dark"] img[src$=".svg"] {
+        filter: invert(1);
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -325,6 +329,11 @@
         --accent-950-75: #f2ecf8bf;
         --accent-950-50: #f2ecf880;
         --accent-950-25: #f2ecf840;
+    }
+
+    :root[data-theme="default"] img[src$=".svg"],
+    :root[data-theme="dark"] img[src$=".svg"] {
+        filter: invert(1);
     }
 }
 
@@ -549,6 +558,8 @@ body {
     -webkit-hyphens: auto;
     hyphens: auto;
     word-wrap: break-word;
+    color: var(--text-950);
+    background-color: var(--background-50);
 }
 
 h1, h2, h3, h4, h5, h6, title {
@@ -573,6 +584,33 @@ a, img, video, picture {
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+    font-style: italic;
+    background-repeat: no-repeat;
+    background-size: cover;
+    shape-margin: 0.75rem;
+}
+
+pre {
+    display: none;
+}
+
+@media (prefers-color-scheme: light) {
+    :root[data-theme="dark"] img[src$=".svg"] {
+        filter: invert(1);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root[data-theme="default"] img[src$=".svg"],
+    :root[data-theme="dark"] img[src$=".svg"] {
+        filter: invert(1);
+    }
 }
 
 .margin-top-0 {

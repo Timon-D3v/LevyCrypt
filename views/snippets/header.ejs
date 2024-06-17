@@ -1,0 +1,20 @@
+<header>
+    <div class=""></div><% 
+    if (chat.open) { %>
+    <div id="header-contact"><% 
+        const contact = chat.publicInfo;
+        const full_name = contact.name + " " + contact.family_name;%>
+        <a class="profile-picture" href="/chat?email=<%= contact.email || "''" %>">
+            <img id="contact-profile-picture" src="<%= contact.picture %>" alt="<%= contact.name %>'s Profilbild" title="<%= full_name %>">
+        </a>
+        <h1 id="contact-name" title="<%= full_name %>"><%= full_name %></h1>
+    </div><% 
+    } else { %>
+    <div id="header-contact">
+        <a class="profile-picture">
+            <img id="contact-profile-picture" src="/img/svg/user.svg" alt="Kein Benutzer" title="Kein Kontakt ausgewählt">
+        </a>
+        <h1 id="contact-name" title="Kein Kontakt ausgewählt">Kein Kontakt</h1>
+    </div>
+    <% }; %>
+</header>

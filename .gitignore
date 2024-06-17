@@ -136,3 +136,4 @@ cert/
 _Notes.txt
 .vscode/
 Start Server.bat
+database/backup/

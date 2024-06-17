@@ -49,6 +49,30 @@ const imagekitUpload = async (base64, name, folder) => {
   }
 };
 
+const importJWK = async (key, isPrivateKey = false) => {
+    return await crypto.subtle.importKey(
+        "jwk",
+        key,
+        {
+            name: "RSA-OAEP",
+            hash: "SHA-256"
+        },
+        true,
+        isPrivateKey ? ["decrypt"] : ["encrypt"]
+    );
+}
+
+/**
+ * Validates an email address using a regular expression.
+ * 
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} - Returns true if the email address is valid, false otherwise.
+ */
+const validateEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+};
+
 /**
  * Generates a salted and hashed password based on the provided password.
  * 
@@ -63,15 +87,15 @@ const createPasswordHash = async (password) => {
 };
 
 /**
- * Validates a user login by comparing the provided username and password with the stored credentials.
+ * Validates a user login by comparing the provided email and password with the stored credentials.
  *
- * @param {string} username - The username of the user attempting to login.
+ * @param {string} email - The email of the user attempting to login.
  * @param {string} password - The password of the user attempting to login.
- * @returns {boolean} - Returns true if the login credentials are valid, false otherwise.$
+ * @returns {boolean} - Returns true if the login credentials are valid, false otherwise.
  */
-const validateLogin = async (username, password) => {
+const validateLogin = async (email, password) => {
     try {
-        const saltedHash = await db.getPasswordWithUsername(username);
+        const saltedHash = await db.getPasswordWithEmail(email);
         const [salt, hashedPassword] = saltedHash.split(":");
 
         const userBuffer = crypto.scryptSync(password, salt, 256);
@@ -94,14 +118,14 @@ const validateLogin = async (username, password) => {
  */
 const decryptMessage = (encryptedMessage, privateKey) => {
     // Convert the encrypted message from base64 back to a buffer
-    const encryptedData = Buffer.from(encryptedMessage, "base64");
+    const encryptedData = Buffer.from(new Uint8Array(encryptedMessage));
     
     // Decrypt the message using the private key
     const decryptedData = crypto.privateDecrypt(
         {
             key: privateKey,
-            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-            oaepHash: "sha256" // Use the same hash function as used in frontend encryption
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING, // Ensure OAEP padding is specified
+            oaepHash: "SHA256" // Match the hash algorithm used in encryption
         },
         encryptedData
     );
@@ -113,9 +137,45 @@ const decryptMessage = (encryptedMessage, privateKey) => {
 };
 
 /**
+ * Encrypts a message using the provided public key.
+ *
+ * @param {string} message - The message to be encrypted.
+ * @param {string} publicKey - The public key used for encryption.
+ * @returns {string} - The encrypted message as a base64-encoded string.
+ */
+const encryptMessage = (message, publicKey) => {
+    const encoder = new TextEncoder()
+    const data = encoder.encode(message)
+
+    const encryptedData = crypto.publicEncrypt(
+        {
+            key: publicKey,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING, // Ensure OAEP padding is specified
+            oaepHash: "SHA256" // Match the hash algorithm used in encryption
+        },
+        data
+    );
+
+    return Array.from(new Uint8Array(encryptedData));
+}
+
+const cipherEncrypt = async (string) => {
+    const key = crypto.randomBytes(32);
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv("aes256", key, iv);
+    let encrypted = cipher.update(string, "utf-8", "base64");
+    encrypted += cipher.final("base64");
+    return {
+        encrypted,
+        symmetricKey: key.toString("base64"),
+        iv: iv.toString("base64")
+    };
+}
+
+/**
  * This function is used to sign up a new user by creating a user profile with the provided information.
  * 
- * @param {string} username - The username of the new user.
+ * @param {string} email - The email of the new user.
  * @param {string} password - The password of the new user.
  * @param {string} name - The first name of the new user.
  * @param {string} family_name - The last name of the new user.
@@ -123,34 +183,35 @@ const decryptMessage = (encryptedMessage, privateKey) => {
  * 
  * @returns {boolean} - Returns true if the sign up is successful, false otherwise.
  */
-const signUp = async (username, password, name, family_name, picture) => {
+const signUp = async (email, password, name, family_name, picture) => {
     const array = [
-        username,
+        email,
         password,
         name,
         family_name
     ];
 
-    if (typeof picture === "string" && picture !== "") {
-        const { path } = await imagekitUpload(
-            picture,
-            username + "__" + randomString(32),
-            "chat-app-2024/profile-picture"
-        );
-        array.push(path);
-    } else {
-        array.push("/img/svg/user.svg");
-    }
-
     try {
         array.forEach(element => {
             if (typeof element !== "string" || element === "") {
+                console.log(element);
                 throw new Error("Element does not match expected value!");
             }
         });
     } catch (err) {
         console.error(err.message);
         return false;
+    }
+
+    if (typeof picture === "string" && picture !== "") {
+        const { path } = await imagekitUpload(
+            picture,
+            email + "__" + randomString(32),
+            "chat-app-2024/profile-picture"
+        );
+        array.push(path.replace("@", "_"));
+    } else {
+        array.push("/img/svg/user.svg");
     }
 
     const hash = await createPasswordHash(password);
@@ -160,18 +221,45 @@ const signUp = async (username, password, name, family_name, picture) => {
     return valid;
 };
 
+/**
+ * Retrieves public information for a given email.
+ * @param {string} email - The email address to retrieve public information for.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing the public information.
+ */
+const getPublicInfo = async (email) => {
+    try {
+        const info = await db.getAccountWithEmail(email);
+        delete info.id;
+        delete info.password;
+        return info;
+    } catch (err) {
+        console.error(err.message);
+        return {};
+    }
+};
+
 export default {
     imagekitUpload,
+    importJWK,
+    validateEmail,
     createPasswordHash,
     validateLogin,
     decryptMessage,
-    signUp
+    encryptMessage,
+    cipherEncrypt,
+    signUp,
+    getPublicInfo
 };
 
 export {
     imagekitUpload,
+    importJWK,
+    validateEmail,
     createPasswordHash,
     validateLogin,
     decryptMessage,
-    signUp
+    encryptMessage,
+    cipherEncrypt,
+    signUp,
+    getPublicInfo
 };

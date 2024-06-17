@@ -12,8 +12,8 @@
     <body>
         <header>
             <a class="banner" href="/">
-                <img class="logo" src="/img/logo.jpg" alt="Logo" draggable="false">
-                <div class="banner-text">3D-Chat</div>
+                <img class="logo" src="/img/logo.svg" alt="Logo" draggable="false">
+                <div class="banner-text">LevyCrypt</div>
             </a><%
             if (user?.valid) { %>
             <a class="user" href="/user">
@@ -29,13 +29,13 @@
             <div class="auth-wrapper">
                 <form class="login">
                     <h1 class="auth-title margin-top-0">Login</h1>
-                    <input type="text" id="username" autocomplete="username" class="auth-input" placeholder="Benutzername">
+                    <input type="email" id="email" autocomplete="email" class="auth-input" placeholder="E-Mail">
                     <input type="password" id="password" autocomplete="current-password" class="auth-input" placeholder="Passwort">
                     <button type="button" class="auth-button" id="login-btn">Einloggen</button>
                 </form>
                 <form class="sign-up">
                     <h1 class="auth-title">Registrieren</h1>
-                    <input type="text" id="new-username" autocomplete="username" class="auth-input" placeholder="Benutzername">
+                    <input type="email" id="new-email" autocomplete="email" class="auth-input" placeholder="E-Mail">
                     <input type="password" id="new-password" autocomplete="new-password" class="auth-input" placeholder="Passwort">
                     <input type="text" id="given-name" autocomplete="given-name" class="auth-input margin-top-10" placeholder="Vorname">
                     <input type="text" id="family-name" autocomplete="family-name" class="auth-input margin-top-10" placeholder="Nachname">
@@ -47,5 +47,10 @@
         </main>
         <canvas id="threejs-bg"></canvas>
         <script type="module" src="/js/home.three.js"></script>
+        <script type="module">
+            import { login } from "/js/functions.js";
+
+            setTimeout(() => login("fiedlertimon@gmail.com", "WASD"), 1000);
+        </script>
     </body>
 </html>

@@ -9,11 +9,11 @@ const { privateKey, publicKey } = generateKeyPairSync("rsa", {
     modulusLength: 4096,
     publicKeyEncoding: {
         type: "spki",
-        format: "pem"
+        format: "jwk"
     },
     privateKeyEncoding: {
         type: "pkcs8",
-        format: "pem"
+        format: "jwk"
     }
 });
 

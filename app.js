@@ -24,7 +24,7 @@ import routeSecurity from "./routes/security.js";
 
 
 // Constants 
-const ENVIRONMENT = "prod" // || "prod"
+const ENVIRONMENT = "dev" // "prod" or "dev"
 const CERT = ENVIRONMENT === "prod" ? {
     COM: {
         key: fs.readFileSync("./cert/com/private.key.pem"),

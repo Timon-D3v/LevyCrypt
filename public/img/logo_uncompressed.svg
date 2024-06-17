@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="800px"
+   height="800px"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <rect
+       x="-93.706721"
+       y="-110.2432"
+       width="1338.0769"
+       height="963.24997"
+       id="rect17" />
+    <rect
+       x="2.75608"
+       y="-1.37804"
+       width="1154.7975"
+       height="829.58009"
+       id="rect16" />
+    <rect
+       x="77.170241"
+       y="86.816521"
+       width="682.12981"
+       height="625.63017"
+       id="rect15" />
+    <rect
+       x="181.90128"
+       y="239.77896"
+       width="89.572601"
+       height="84.060441"
+       id="rect14" />
+  </defs>
+  <g
+     id="layer1">
+    <text
+       xml:space="preserve"
+       transform="scale(0.03)"
+       id="text14"
+       style="fill:#3007ff;fill-opacity:1;font-size:42.66666667px;white-space:pre;shape-inside:url(#rect14)" />
+    <text
+       xml:space="preserve"
+       transform="scale(0.03)"
+       id="text17"
+       style="fill:#3007ff;fill-opacity:1;font-size:592px;white-space:pre;shape-inside:url(#rect17)" />
+    <path
+       style="fill:#416fbe;fill-opacity:1;stroke-width:0.03"
+       d="m 2.3977896,21.580107 12.6094224,0.04134 0.009,-3.017881 -9.6419187,-0.03246 0.03594,-12.0039415 -3.011568,-0.00902 -0.044976,15.0218225 z"
+       id="path17" />
+    <path
+       style="fill:#416fbe;fill-opacity:1;stroke-width:0.03"
+       d="M 3.6793668,5.374356 0.49609438,2.3564484 c 0,0 14.38579962,-2.64677547 19.14097562,2.1084012 4.755177,4.7551767 3.228991,15.0306784 2.178976,16.1915644 -1.050015,1.160886 -5.592815,0.923693 -5.592815,0.923693 l -2e-6,-2.993691 c 0,0 2.316812,0.17441 3.185855,-1.197678 0.869042,-1.372087 0.729674,-5.972973 -2.624556,-9.4512276 C 13.430297,4.4592562 3.720708,5.4156972 3.720708,5.4156972 Z"
+       id="path18" />
+    <circle
+       style="fill:#416fbe;fill-opacity:1;stroke-width:0.0326866"
+       id="path19"
+       cx="8.0822048"
+       cy="11.954091"
+       r="1.5089538" />
+    <circle
+       style="fill:#416fbe;fill-opacity:1;stroke-width:0.0326866"
+       id="path19-6"
+       cx="12.029072"
+       cy="11.991083"
+       r="1.5089538" />
+    <circle
+       style="fill:#416fbe;fill-opacity:1;stroke-width:0.0326866"
+       id="path19-4"
+       cx="15.889191"
+       cy="12.0112"
+       r="1.5089538" />
+  </g>
+</svg>

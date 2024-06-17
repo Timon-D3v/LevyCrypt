@@ -1,3 +1,9 @@
+<% if (chat.open === false) { %>
+<script>
+    window.location.href = "/chat?email=max.mustermann@timondev.com";
+</script>
+<% } else { %>
+
 <!DOCTYPE html>
 <html lang="de-ch" data-theme="default">
     <%- include("./snippets/head.ejs", {
@@ -9,26 +15,38 @@
         PORT,
         ENVIRONMENT
     }); %>
-    <body>
+    <body data-barba-type="wrapper">
         <%- include("./snippets/header.ejs", {
             title,
             ORIGIN,
-            path
+            path,
+            chat,
+            user
         }); %>
         <%- include("./snippets/nav.ejs", {
             title,
             ORIGIN,
-            path
+            path,
+            user,
+            chat
         }); %>
         <% if (chat.open) { %>
-        <%- includes("./snippets/chat-nav.ejs", {
+        <%- include("./snippets/messages.ejs", {
             title,
             ORIGIN,
-            path
+            path,
+            chat
         }); %><% 
         } else { %>
-        <main>
+        <main data-barba-type="chat-container" data-barba-namespace="empty-chat">
+            <!-- Some pretty placeholder -->
         </main><%
         }; %>
+        <div id="transition"></div>
     </body>
 </html>
+
+
+
+
+<% } %>

@@ -1,5 +1,24 @@
 /* Global */
 
+:root {
+    --header-height: 80px;
+    --header-width: 100%;
+    --nav-height: 80px;
+    --nav-width: 100%;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--header-width);
+    height: var(--header-height);
+    background-color: var(--background-50);
+    -webkit-box-shadow: 0 1px 1px 0 var(--background-950-25);
+    box-shadow: 0 1px 1px 0 var(--background-950-25);
+    z-index: 101;
+}
+
 .banner {
     display: flex;
     height: 100%;
@@ -10,6 +29,7 @@
     padding: calc(var(--header-height) / 10);
     box-sizing: border-box;
     border-radius: calc(var(--header-height) / 5);
+    filter: none !important;
 }
 
 .banner-text {
@@ -24,14 +44,155 @@
     color: var(--text-950);
 }
 
+#header-contact {
+    display: flex;
+    align-items: center;
+    height: var(--header-height);
+    width: 100%;
+}
+
+a.profile-picture {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+#contact-profile-picture {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 10%;
+    margin: 0 1dvw;
+    object-fit: cover;
+}
+
+#contact-name {
+    --font-size: 50px;
+    --lh: 1.25;
+    width: 100%;
+    padding: 0 2.5dvw;
+    box-sizing: border-box;
+    text-align: center;
+    margin: 0;
+    font-size: var(--font-size);
+    line-height: var(--lh);
+}
+
+nav {
+    --bs: 0 -1px 1px 0 var(--background-950-25);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: var(--nav-width);
+    height: var(--nav-height);
+    background-color: var(--background-50);
+    -webkit-box-shadow: var(--bs);
+    box-shadow: var(--bs);
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+main {
+    --w: 100%;
+    --h: calc(100% - var(--header-height) - var(--nav-height));
+    --t: var(--header-height);
+    --l: 0;
+    --scb: calc(var(--header-height) * 2 / 3);
+    position: fixed;
+    top: var(--t);
+    left: var(--l);
+    height: var(--h);
+    width: var(--w);
+    overflow-y: auto;
+    padding-bottom: var(--scb);
+    box-sizing: border-box;
+}
+
+.chat-input-wrapper {
+    --b: var(--nav-height);
+    --l: 0;
+    --h: calc(2 * var(--nav-height) / 3);
+    --w: 100%;
+    position: fixed;
+    bottom: var(--b);
+    left: var(--l);
+    height: var(--h);
+    width: var(--w);
+    background-color: transparent;
+    opacity: 0.5;
+}
+
+#transition {
+    --w: 100%;
+    --h: calc(100% - var(--header-height) - var(--nav-height));
+    --t: var(--header-height);
+    --l: 0;
+    position: fixed;
+    top: var(--t);
+    left: var(--l);
+    height: var(--h);
+    width: var(--w);
+    z-index: 99;
+    background-color: var(--background-50);
+    transform: translateY(-100%);
+}
+
 /* Desktop */
 
 @media screen and (min-width: 1200px) {
-    
+
+    :root {
+        --nav-height: calc(100% - var(--header-height));
+        --nav-width: 30%;
+    }
+
+    nav {
+        --bs: 1px 0 1px 0 var(--background-950-25);
+    }
+
+    main,
+    #transition {
+        --l: var(--nav-width);
+        --b: 0;
+        --w: calc(100% - var(--l));
+        --h: calc(100% - var(--header-height));
+        --scb: var(--header-height);
+    }
+
+    .chat-input-wrapper {
+        --b: 0;
+        --l: var(--nav-width);
+        --w: calc(100% - var(--l));
+        --h: var(--header-height);
+    }
 }
 
 @media screen and (min-width: 1000px) and (max-width: 1199px) {
-    
+
+    :root {
+        --nav-height: calc(100% - var(--header-height));
+        --nav-width: 30%;
+    }
+
+    nav {
+        --bs: 1px 0 1px 0 var(--background-950-25);
+    }
+
+    main,
+    #transition {
+        --l: var(--nav-width);
+        --b: 0;
+        --w: calc(100% - var(--l));
+        --h: calc(100% - var(--header-height));
+        --scb: var(--header-height);
+    }
+
+    .chat-input-wrapper {
+        --b: 0;
+        --l: var(--nav-width);
+        --w: calc(100% - var(--l));
+        --h: var(--header-height);
+    }
 }
 
 /* Tablet */
@@ -47,12 +208,26 @@
 /* Mobile */
 
 @media screen and (max-width: 575px) {
-    
+
+    #contact-name {
+        --font-size: 30px;
+        --lh: 1;
+    }   
 }
 
 @media screen and (max-width: 260px) {
+
     .banner-text {
         font-size: 25px;
         margin: 0;
+    }
+
+    .profile-picture:has( > #contact-profile-picture) {
+        display: none;
+    }
+
+    #contact-name {
+        --font-size: 25px;
+        --lh: 1.1;
     }
 }

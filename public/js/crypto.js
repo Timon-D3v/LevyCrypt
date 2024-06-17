@@ -1,7 +1,3 @@
-import global from "./global.js";
-
-
-
 /**
  * This class creates my own crypto module.
  */
@@ -19,15 +15,12 @@ class Crypto {
                 ["encrypt", "decrypt"]
             );
         
-            const publicKey = await window.crypto.subtle.exportKey("spki", keys.publicKey);
-            const privateKey = await window.crypto.subtle.exportKey("pkcs8", keys.privateKey);
-
-            const publicKeyPEM = await this.formatPEM(publicKey, "PUBLIC");
-            const privateKeyPEM = await this.formatPEM(privateKey, "PRIVATE");
+            const publicKey = await window.crypto.subtle.exportKey("jwk", keys.publicKey);
+            const privateKey = await window.crypto.subtle.exportKey("jwk", keys.privateKey);
         
             return {
-                publicKey: publicKeyPEM,
-                privateKey: privateKeyPEM
+                publicKey,
+                privateKey
             };
         } catch (error) {
             console.error("Error generating RSA key pair:", error);
@@ -40,7 +33,7 @@ class Crypto {
      * @param {ArrayBuffer} buffer - The ArrayBuffer to be converted to Base64.
      * @returns {string} - Base64 string representing the input ArrayBuffer.
      */
-    async arrayBufferToBase64(buffer) {
+    arrayBufferToBase64(buffer) {
         const bytes = new Uint8Array(buffer);
         let binary = "";
         for (let i = 0; i < bytes.byteLength; i++) {
@@ -54,6 +47,7 @@ class Crypto {
      * @param {ArrayBuffer} keyArrayBuffer - The key array buffer to be formatted.
      * @param {string} type - The type of the key (e.g., "PUBLIC", "PRIVATE").
      * @returns {Promise<string>} The formatted PEM string representing the key.
+     * @note This function is not used in the current implementation, but it may be useful in the future.
      */
     async formatPEM(keyArrayBuffer, type) {
         const keyBase64 = await this.arrayBufferToBase64(keyArrayBuffer);
@@ -73,6 +67,7 @@ class Crypto {
      * Converts a PEM (Privacy-Enhanced Mail) formatted public key to a JWK (JSON Web Key) format.
      * @param {string} pemKey - The PEM formatted public key.
      * @returns {Promise<CryptoKey>} - The imported public key in JWK format.
+     * @note This function is not used in the current implementation, but it may be useful in the future.
      */
     async pemToJwk(pemKey) {
         // Remove header and footer lines
@@ -106,21 +101,117 @@ class Crypto {
      * @returns {Promise<string>} - The encrypted input data in base64 format.
      */
     async clientEncrypt(input) {
-        const { publicKey } = global;
-        const key = await this.pemToJwk(publicKey);
+        const publicKeyObject = JSON.parse(window.sessionStorage.getItem("server_publicKey"));
         const encoder = new TextEncoder();
         const data = encoder.encode(input);
 
+        const publicKey = await window.crypto.subtle.importKey(
+            "jwk",
+            publicKeyObject,
+            {
+                name: "RSA-OAEP",
+                hash: "SHA-256"
+            },
+            true,
+            ["encrypt"]
+        );
+
         const encryptedData = await window.crypto.subtle.encrypt(
-            { name: "RSA-OAEP" },
-            key,
+            {
+                name: "RSA-OAEP",
+                hash: { name: "SHA-256" }
+            },
+            publicKey,
             data
         );
 
-        // Convert the encrypted data to a base64 string for easier transmission
-        const encryptedInput = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
+        return Array.from(new Uint8Array(encryptedData))
+    }
 
-        return encryptedInput;
+    async encrypt(input, rawPublicKey) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+
+        const publicKey = await window.crypto.subtle.importKey(
+            "jwk",
+            rawPublicKey,
+            {
+                name: "RSA-OAEP",
+                hash: "SHA-256"
+            },
+            true,
+            ["encrypt"]
+        );
+
+        const encryptedData = await window.crypto.subtle.encrypt(
+            {
+                name: "RSA-OAEP",
+                hash: { name: "SHA-256" }
+            },
+            publicKey,
+            data
+        );
+        
+        return Array.from(new Uint8Array(encryptedData))
+    }
+
+    async clientDecrypt(encryptedData) {
+        const privateKeyObject = JSON.parse(window.sessionStorage.getItem("client_privateKey"));
+        const decoder = new TextDecoder();
+        const data = new Uint8Array(encryptedData);
+
+        const privateKey = await window.crypto.subtle.importKey(
+            "jwk",
+            privateKeyObject,
+            {
+                name: "RSA-OAEP",
+                hash: "SHA-256"
+            },
+            true,
+            ["decrypt"]
+        );
+
+        const decryptedData = await window.crypto.subtle.decrypt(
+            {
+                name: "RSA-OAEP",
+                hash: { name: "SHA-256" }
+            },
+            privateKey,
+            data
+        );
+
+        const decryptedInput = decoder.decode(decryptedData);
+
+        return decryptedInput;
+    }
+
+    async decrypt(encryptedData, rawPrivateKey) {
+        const decoder = new TextDecoder();
+        const data = new Uint8Array(encryptedData);
+
+        const privateKey = await window.crypto.subtle.importKey(
+            "jwk",
+            rawPrivateKey,
+            {
+                name: "RSA-OAEP",
+                hash: "SHA-256"
+            },
+            true,
+            ["decrypt"]
+        );
+
+        const decryptedData = await window.crypto.subtle.decrypt(
+            {
+                name: "RSA-OAEP",
+                hash: { name: "SHA-256" }
+            },
+            privateKey,
+            data
+        );
+
+        const decryptedInput = decoder.decode(decryptedData);
+
+        return decryptedInput;
     }
 }
 
