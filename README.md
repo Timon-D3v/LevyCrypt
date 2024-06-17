@@ -79,6 +79,6 @@ Feel free to explore my repositories and reach out if you want to collaborate or
 
 ## 🔗 Links
 
-- [LevyCrypt](https://www.timondev.com)
+- [LevyCrypt](https://www.timondev.vip)
 
 - [My Portfolio](https://www.timondev.com)
