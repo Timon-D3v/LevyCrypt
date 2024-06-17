@@ -52,9 +52,9 @@ I'm a 17-year-old self-taught web developer with about one year of experience in
 - **Databases**: MySQL
 
 #### 🌟 Featured Projects:
-- [**Zurich Meets Tanzania**](https://zurich-meets-tanzania.com) - A full-stack website for a non-profit association helping a hospital in Ifisi, Tanzania. Built with Express.js, MySQL, and Stripe for donations and subscriptions. The custom frontend features a blog, static pages, and user authentication.
+- [**Zurich Meets Tanzania**](https://www.zurich-meets-tanzania.com) - A full-stack website for a non-profit association helping a hospital in Ifisi, Tanzania. Built with Express.js, MySQL, and Stripe for donations and subscriptions. The custom frontend features a blog, static pages, and user authentication.
 - [**Timon.js**](https://www.npmjs.com/package/timonjs) - My own JavaScript framework, created to extend the capabilities of jQuery and include frequently used functions like `getElm` for DOM manipulation and custom alert dialogs.
-- [**Personal Portfolio**](https://timondev.com) - My personal portfolio website showcasing my projects and skills, built with an Express.js backend and MySQL.
+- [**Personal Portfolio**](https://www.timondev.com) - My personal portfolio website showcasing my projects and skills, built with an Express.js backend and MySQL.
 
 #### 📚 Currently Learning:
 - Advanced JavaScript and Node.js Crypto
@@ -79,6 +79,6 @@ Feel free to explore my repositories and reach out if you want to collaborate or
 
 ## 🔗 Links
 
-- [LevyCrypt](https://chat.timondev.com)
+- [LevyCrypt](https://www.timondev.vip)
 
-- [My Portfolio](https://timondev.com)
+- [My Portfolio](https://www.timondev.com)
