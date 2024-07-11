@@ -155,6 +155,12 @@ label.auth-input:hover {
     color: var(--text-800);
 }
 
+.auth-input::-webkit-inner-spin-button {
+    display: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .auth-button {
     position: relative;
     left: 50%;

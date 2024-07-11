@@ -1,11 +1,13 @@
 import ImageKit from "imagekit";
 import crypto from "crypto";
 import dotenv from "dotenv";
+import Mailjet from "node-mailjet";
 import path from "path";
 import db from "../database/database.js";
 import { randomString } from "timonjs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { Email2FA as Email } from "../app.js";
 
 
 
@@ -14,6 +16,11 @@ const imagekit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
     privateKey: process.env.IMAGEKIT_SECRET_KEY,
     urlEndpoint: "https://ik.imagekit.io/timon/"
+});
+
+const mailjet = new Mailjet({
+    apiKey: process.env.MAILJET_PUBLIC_KEY,
+    apiSecret: process.env.MAILJET_SECRET_KEY
 });
 
 
@@ -238,6 +245,62 @@ const getPublicInfo = async (email) => {
     }
 };
 
+const getFile = async (user, filename) => {
+    try {
+        const response = await db.getFile(filename);
+
+        if (response.valid === false) throw new Error("Diese Datei existiert nicht.");
+        if (response.from !== user && response.to !== user) throw new Error("Diese Datei gehört dir nicht.");
+
+        delete response.id;
+
+        return response;
+    } catch (err) {
+        console.error(err.message);
+        return {
+            valid: false,
+            message: err.message
+        };
+    }
+};
+
+const getRandomInt = (min, max) => {
+    const range = max - min + 1;
+    const maxUint32 = 0xFFFFFFFF;
+    let randomInt;
+    do {
+        const buffer = crypto.randomBytes(4);
+        randomInt = buffer.readUInt32BE(0);
+    } while (randomInt > maxUint32 - (maxUint32 % range));
+    return min + (randomInt % range);
+};
+
+const send2FARequest = async (email, code) => {
+    try {
+        const { HTMLPart, TextPart } = new Email(code);
+        const req = await mailjet.post("send", {version: "v3.1"}).request({
+            Messages: [{
+                From: {
+                    Email: "info@timondev.com",
+                    Name: "LevyCrypt"
+                },
+                To: [{
+                    Email: email
+                }],
+                Subject: "Dein 2-FA Code:",
+                TextPart,
+                HTMLPart
+            }]
+        });
+        return req;
+    } catch (err) {
+        console.error(err.message);
+        return err;
+    };
+};
+
+
+
 export default {
     imagekitUpload,
     importJWK,
@@ -248,7 +311,10 @@ export default {
     encryptMessage,
     cipherEncrypt,
     signUp,
-    getPublicInfo
+    getPublicInfo,
+    getFile,
+    getRandomInt,
+    send2FARequest
 };
 
 export {
@@ -261,5 +327,8 @@ export {
     encryptMessage,
     cipherEncrypt,
     signUp,
-    getPublicInfo
+    getPublicInfo,
+    getFile,
+    getRandomInt,
+    send2FARequest
 };

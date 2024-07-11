@@ -5,7 +5,6 @@ import functions from "./functions.js";
 const socket = io();
 
 socket.on("incoming-message", message => {
-    console.log(message);
     functions.displayChat(message);
 });
 

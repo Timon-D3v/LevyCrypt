@@ -14,11 +14,13 @@ import * as socket from "socket.io";
 // Custom components
 import ioConnect from "./components/events.js";
 import keys from "./components/keys.js";
+import Email from "./components/email.js";
 
 // Routes
 import routeRoot from "./routes/root.js";
 import routeAuth from "./routes/auth.js";
 import routeChat from "./routes/chat.js";
+import routeUpload from "./routes/upload.js";
 import routeSecurity from "./routes/security.js";
 
 
@@ -48,6 +50,15 @@ const onlineUsers = [];
 
 
 
+// Prepare Email
+class Email2FA extends Email {
+    constructor(CODE) {
+        super(CODE, ENVIRONMENT === "prod" ? "https://timondev.vip" : "http://localhost:8080");
+    }
+}
+
+
+
 // Export constants
 export default {
     ENVIRONMENT,
@@ -56,7 +67,8 @@ export default {
     server,
     io,
     keys,
-    onlineUsers
+    onlineUsers,
+    Email2FA
 };
 
 export {
@@ -66,7 +78,8 @@ export {
     server,
     io,
     keys,
-    onlineUsers
+    onlineUsers,
+    Email2FA
 };
 
 
@@ -118,6 +131,7 @@ app.use(cors());
 app.use("/", routeRoot);
 app.use("/auth", routeAuth);
 app.use("/chat", routeChat);
+app.use("/upload", routeUpload);
 app.use("/security", routeSecurity);
 
 app.get("*", (req, res) => res.status(404).redirect("/"));

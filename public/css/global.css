@@ -560,6 +560,7 @@ body {
     word-wrap: break-word;
     color: var(--text-950);
     background-color: var(--background-50);
+    scroll-behavior: smooth;
 }
 
 h1, h2, h3, h4, h5, h6, title {
@@ -619,4 +620,8 @@ pre {
 
 .margin-top-10 {
     margin-top: 10px;
+}
+
+.invisible {
+    display: none !important;
 }

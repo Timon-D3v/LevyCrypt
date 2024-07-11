@@ -59,5 +59,7 @@
     <script type="module" src="/js/gsap.js" defer></script>
     <script type="module" src="/js/chat.js" defer></script><%
     if (user?.valid) { %>
-    <script type="module" src="/js/user.js" defer></script><% }; %>
+    <script type="module" src="/js/user.js" defer></script><% };
+    if (typeof extra !== "undefined") { %>
+    <%- extra %><% }; %>
 </head>

@@ -2,6 +2,11 @@
  * This class creates my own crypto module.
  */
 class Crypto {
+
+    /**
+     * Generates an RSA key pair using the Web Crypto API.
+     * @returns {Promise<{publicKey: JsonWebKey, privateKey: JsonWebKey}>} The generated RSA key pair.
+     */
     async generateRSAKeyPair() {
         try {
             const keys = await window.crypto.subtle.generateKey(
@@ -43,62 +48,25 @@ class Crypto {
     }
 
     /**
-     * Formats a given key array buffer into a PEM (Privacy-Enhanced Mail) string.
-     * @param {ArrayBuffer} keyArrayBuffer - The key array buffer to be formatted.
-     * @param {string} type - The type of the key (e.g., "PUBLIC", "PRIVATE").
-     * @returns {Promise<string>} The formatted PEM string representing the key.
-     * @note This function is not used in the current implementation, but it may be useful in the future.
+     * Converts a base64 string to an ArrayBuffer.
+     *
+     * @param {string} base64 - The base64 string to convert.
+     * @returns {ArrayBuffer} - The converted ArrayBuffer.
      */
-    async formatPEM(keyArrayBuffer, type) {
-        const keyBase64 = await this.arrayBufferToBase64(keyArrayBuffer);
-        const chunks = [];
-        const base64Chars = keyBase64.match(/.{1,64}/g);
-      
-        base64Chars.forEach((chunk) => {
-            chunks.push(chunk);
-        });
-      
-        const pemString = `-----BEGIN ${type} KEY-----\n${chunks.join('\n')}\n-----END ${type} KEY-----\n`;
-      
-        return pemString;
-    }
-
-    /**
-     * Converts a PEM (Privacy-Enhanced Mail) formatted public key to a JWK (JSON Web Key) format.
-     * @param {string} pemKey - The PEM formatted public key.
-     * @returns {Promise<CryptoKey>} - The imported public key in JWK format.
-     * @note This function is not used in the current implementation, but it may be useful in the future.
-     */
-    async pemToJwk(pemKey) {
-        // Remove header and footer lines
-        const pemContents = pemKey.replace(/-----BEGIN PUBLIC KEY-----/, '').replace(/-----END PUBLIC KEY-----/, '');
-
-        // Remove newline characters
-        const strippedKey = pemContents.replace(/\r?\n|\r/g, '');
-
-        // Decode base64
-        const decodedKey = atob(strippedKey);
-        const buffer = new Uint8Array(decodedKey.length);
-
-        for (let i = 0; i < decodedKey.length; ++i) {
-            buffer[i] = decodedKey.charCodeAt(i);
+    base64ToArrayBuffer(base64) {
+        const binaryString = atob(base64);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
         }
-
-        const publicKey = await window.crypto.subtle.importKey(
-            "spki",
-            buffer,
-            { name: "RSA-OAEP", hash: { name: "SHA-256" } },
-            true,
-            ["encrypt"]
-        );
-
-        return publicKey;
+        return bytes.buffer;
     }
 
     /**
-     * Encrypts an input using RSA-OAEP encryption algorithm with a given public key.
+     * Encrypts an input using RSA-OAEP encryption algorithm with the server public key from the session storage.
      * @param {string} input - The data that needs to be encrypted.
-     * @returns {Promise<string>} - The encrypted input data in base64 format.
+     * @returns {Promise<number[]>} - The encrypted data as an array of numbers.
      */
     async clientEncrypt(input) {
         const publicKeyObject = JSON.parse(window.sessionStorage.getItem("server_publicKey"));
@@ -128,6 +96,12 @@ class Crypto {
         return Array.from(new Uint8Array(encryptedData))
     }
 
+    /**
+     * Encrypts the given input using RSA-OAEP encryption algorithm with the provided public key.
+     * @param {string} input - The input to be encrypted.
+     * @param {JsonWebKey} rawPublicKey - The raw public key used for encryption.
+     * @returns {Promise<number[]>} - The encrypted data as an array of numbers.
+     */
     async encrypt(input, rawPublicKey) {
         const encoder = new TextEncoder();
         const data = encoder.encode(input);
@@ -155,6 +129,11 @@ class Crypto {
         return Array.from(new Uint8Array(encryptedData))
     }
 
+    /**
+     * Decrypts the given encrypted data using the client's private key.
+     * @param {ArrayBuffer} encryptedData - The encrypted data to be decrypted.
+     * @returns {Promise<string>} - A promise that resolves to the decrypted input as a string.
+     */
     async clientDecrypt(encryptedData) {
         const privateKeyObject = JSON.parse(window.sessionStorage.getItem("client_privateKey"));
         const decoder = new TextDecoder();
@@ -185,6 +164,12 @@ class Crypto {
         return decryptedInput;
     }
 
+    /**
+     * Decrypts the given encrypted data using the provided private key.
+     * @param {ArrayBuffer} encryptedData - The encrypted data to be decrypted.
+     * @param {JsonWebKey} rawPrivateKey - The raw private key used for decryption.
+     * @returns {Promise<string>} - A promise that resolves to the decrypted input as a string.
+     */
     async decrypt(encryptedData, rawPrivateKey) {
         const decoder = new TextDecoder();
         const data = new Uint8Array(encryptedData);
@@ -207,6 +192,42 @@ class Crypto {
             },
             privateKey,
             data
+        );
+
+        const decryptedInput = decoder.decode(decryptedData);
+
+        return decryptedInput;
+    }
+
+    /**
+     * Decrypts the given encrypted message using the provided key and initialization vector (IV).
+     *
+     * @param {string} encrypted - The encrypted message to decrypt.
+     * @param {string} rawKey - The raw key used for decryption.
+     * @param {string} iv - The initialization vector (IV) used for decryption.
+     * @returns {Promise<string>} - A promise that resolves to the decrypted message.
+     */
+    async cipherDecrypt(encrypted, rawKey, iv) {
+        const decoder = new TextDecoder();
+        const keyBuffer = this.base64ToArrayBuffer(rawKey);
+        const ivBuffer = this.base64ToArrayBuffer(iv);
+        const messageBuffer = this.base64ToArrayBuffer(encrypted);
+
+        const key = await crypto.subtle.importKey(
+            "raw", // Format of the key
+            keyBuffer, // Key buffer
+            "AES-CBC", // Algorithm
+            false, // Extractable
+            ["decrypt"] // Usages
+        );
+
+        const decryptedData = await window.crypto.subtle.decrypt(
+            {
+                name: "AES-CBC",
+                iv: ivBuffer
+            },
+            key,
+            messageBuffer
         );
 
         const decryptedInput = decoder.decode(decryptedData);

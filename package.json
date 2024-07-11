@@ -1,6 +1,6 @@
 {
   "name": "chat-app",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "type": "module",
   "description": "This is a chat app for my final project. The goal is to create a chat app that has end-to-end encryption an where you can send and view 3d-models.",
   "main": "app.js",
@@ -38,8 +38,9 @@
     "imagekit": "^5.0.1",
     "morgan": "^1.10.0",
     "mysql2": "^3.9.7",
+    "node-mailjet": "^6.0.5",
     "socket.io": "4.7.5",
     "three": "^0.164.1",
-    "timonjs": "^0.0.18"
+    "timonjs": "^1.0.0"
   }
 }

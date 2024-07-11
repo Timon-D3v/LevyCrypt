@@ -13,7 +13,8 @@
         ORIGIN,
         path,
         PORT,
-        ENVIRONMENT
+        ENVIRONMENT,
+        extra: '<link rel="preload" href="/img/placeholder.gif" as="image">'
     }); %>
     <body data-barba-type="wrapper">
         <%- include("./snippets/header.ejs", {
@@ -35,7 +36,8 @@
             title,
             ORIGIN,
             path,
-            chat
+            chat,
+            user
         }); %><% 
         } else { %>
         <main data-barba-type="chat-container" data-barba-namespace="empty-chat">

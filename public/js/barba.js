@@ -1,6 +1,5 @@
 import barba from "@barba/core";
-import { getElm } from "timonjs";
-import crypto from "./crypto.js";
+import { initChats } from "./functions.js";
 import * as animations from "./gsap.js";
 
 barba.init({
@@ -16,21 +15,9 @@ barba.init({
             menu.update();
         },
         afterEnter() {
-            const encrypted = getElm("history").text();
-            const encryptedKey = getElm("symmetricKey").text();
-            const encryptedIv = getElm("iv").text();
-
-            const key = crypto.decryptMessage(encryptedKey);
-            const iv = crypto.decryptMessage(encryptedIv);
-
-            const decrypted = crypto.cipherDecrypt(encrypted, key, iv);
-            const history = JSON.parse(decrypted);
-
-            console.log(history);
-
-            getElm("history").remove();
-            getElm("symmetricKey").remove();
-            getElm("iv").remove();
+            // This function is not called yet: Look out
+            console.log("Hey")
+            initChats();
         }
     }],
     transitions: [{

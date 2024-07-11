@@ -106,6 +106,7 @@ main {
     overflow-y: auto;
     padding-bottom: var(--scb);
     box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
 .chat-input-wrapper {

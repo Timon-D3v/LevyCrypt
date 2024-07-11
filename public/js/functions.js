@@ -35,8 +35,7 @@ async function login(email, password) {
     });
 
     if (res.valid) {
-        window.location.href += "chat";
-        timon.successField("Du bist jetzt eingeloggt.", 1000);
+        init2Fa();
     } else {
         timon.errorField(res.message);
     }
@@ -75,8 +74,7 @@ async function signUp(email, password, name, family_name, picture_element) {
     });
 
     if (res.valid) {
-        window.location.href += "chat";
-        timon.successField("Du hast dich erfolgreich registriert.", 1000);
+        init2Fa();
     } else {
         timon.errorField(res.message);
     }
@@ -100,20 +98,22 @@ function displayChat(data) {
             break;
         case "image":
             innerElement = createElm("img");
-            innerElement.attr("src", data.message.content);
+            innerElement.attribute("src", "/img/placeholder.gif");
+            innerElement.data("data-original-name", data.message.name);
+            displayImage(data.message, innerElement);
             break;
         case "video":
             innerElement = createElm("video");
-            innerElement.attr("src", data.message.content);
+            innerElement.attribute("src", data.message.content);
             break;
         case "file":
             innerElement = createElm("a");
-            innerElement.attr("href", data.message.content);
+            innerElement.attribute("href", data.message.content);
             innerElement.text("Download");
             break;
         case "3d":
             innerElement = createElm("iframe");
-            innerElement.attr("src", data.message.content);
+            innerElement.attribute("src", data.message.content);
             break;
         default:
             innerElement = createElm("p");
@@ -124,6 +124,13 @@ function displayChat(data) {
     innerElement.addClass("inner-message");
     outerElement.append(innerElement);
     getQuery("main").get(0).append(outerElement);
+}
+
+async function displayImage(data, element) {
+    const res = await fetch(data.url, { method: "GET" });
+    const { response } = await res.json();
+    element.attribute("src", response.base64);
+    element.attribute("alt", data.name);
 }
 
 /**
@@ -154,30 +161,82 @@ async function initChats() {
     const encrypted = getElm("history").text();
     const encryptedKey = getElm("symmetricKey").text();
     const encryptedIv = getElm("iv").text();
+    const main = getQuery("main").get(0);
 
     const keyArray = encryptedKey.split(",").map(Number);
     const ivArray = encryptedIv.split(",").map(Number);
 
     const key = await crypto.clientDecrypt(keyArray);
     const iv = await crypto.clientDecrypt(ivArray);
-
-    console.log(key);
-
-    console.log(iv);
-
-    console.log("Hello world")
-    /*const decrypted = crypto.cipherDecrypt(encrypted, key, iv);
+    const decrypted = await crypto.cipherDecrypt(encrypted, key, iv);
     const history = JSON.parse(decrypted);
-
-    console.log(history);
 
     getElm("history").remove();
     getElm("symmetricKey").remove();
-    getElm("iv").remove();*/
+    getElm("iv").remove();
+
+    history.forEach(element => displayChat(element));
+
+    main.scrollTo({
+        top: main.scrollHeight,
+        behavior: "smooth"
+    })
 }
 
 function getKey(type) {
     return JSON.parse(window.sessionStorage.getItem(type));
+}
+
+async function init2Fa() {
+    const res = await post("/auth/2fa/sendCode");
+
+    if (!res.valid) return timon.errorField(res.message);
+
+    const form = createElm("form");
+    const title = createElm("h1");
+    const input = createElm("input");
+    const button = createElm("button");
+    const wrapper = getQuery(".auth-wrapper").get(0);
+
+    title.addClass("auth-title", "margin-top-0");
+    title.text("2-Faktor-Authentifizierung");
+    form.append(title);
+
+    input.id = "auth-code-input";
+    input.type = "number";
+    input.placeholder = "Code";
+    input.addClass("auth-input");
+    input.css({
+        width: "100%",
+    });
+    input.min = 100000;
+    input.max = 999999;
+    form.append(input);
+
+    button.id = "auth-code-button";
+    button.type = "button";
+    button.text("Verifizieren");
+    button.addClass("auth-button");
+    button.click(check2FA);
+    form.append(button);
+
+    getQuery(".login").hide();
+    getQuery(".sign-up").hide();
+    wrapper.append(form);
+}
+
+async function check2FA() {
+    const code = getElm("auth-code-input");
+    const email = getElm("email");
+    if (code.valIsEmpty() || code.val().length > 6) return timon.errorField("Bitte gib einen gültigen Code ein.");
+    const res = await post("/auth/2fa/verifyCode", {
+        code: code.val(),
+        email: email.valIsEmpty() ? getElm("new-email").val() : email.val()});
+    if (res.valid) {
+        window.location.href += "chat";
+    } else {
+        timon.errorField(res.message);
+    }
 }
 
 export default {

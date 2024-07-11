@@ -121,6 +121,36 @@ const saveChat = async (from, to, message) => {
     }
 };
 
+const saveFile = async (from, to, filename, base64) => {
+    try {
+        await pool.query(
+            `INSERT INTO \`${schema}\`.\`files\` (\`from\`, \`to\`, \`filename\`, \`base64\`) VALUES (?, ?, ?, ?);`,
+            [from, to, filename, base64]
+        );
+        return true;
+    } catch (err) {
+        console.error(err.message);
+        return false;
+    }
+};
+
+const getFile = async (filename) => {
+    try {
+        const [ result ] = await pool.query(
+            `SELECT * from \`${schema}\`.\`files\` WHERE (\`filename\` = ?);`,
+            [filename]
+        );
+        result[0].valid = true;
+        return result[0];
+    } catch (err) {
+        console.error(err.message);
+        return {
+            error: err.message,
+            valid: false
+        };
+    }
+};
+
 
 
 export default {
@@ -129,7 +159,9 @@ export default {
     getAllEmails,
     getAccountWithEmail,
     getChatHistory,
-    saveChat
+    saveChat,
+    saveFile,
+    getFile
 };
 
 export {
@@ -138,5 +170,7 @@ export {
     getAllEmails,
     getAccountWithEmail,
     getChatHistory,
-    saveChat
+    saveChat,
+    saveFile,
+    getFile
 };

@@ -3,6 +3,9 @@
         <button>Files</button>
         <input type="text" placeholder="<%= chat.publicInfo.name %> schreiben:" id="main-input" spellcheck="true">
         <button id="send">Send</button>
+        <label for="image-file">Bild hochladen</label>
+        <input style="display: none;" type="file" id="image-file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
+        <button id="send-image">Bild senden</button>
     </div>
     <pre id="history"><%= chat.chatHistory %></pre>
     <pre id="symmetricKey"><%= chat.security.symmetricKey %></pre>
