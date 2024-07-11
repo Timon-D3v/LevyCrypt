@@ -3,7 +3,8 @@ import functions from "./functions.js";
 
 // Initialize Chats
 if (window.location.pathname === "/chat") functions.initChats();
-// functions.initChats();
+
+
 
 const settings = {
     type: "text"

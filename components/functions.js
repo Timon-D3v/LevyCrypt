@@ -7,7 +7,7 @@ import db from "../database/database.js";
 import { randomString } from "timonjs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { Email2FA as Email } from "../app.js";
+import { Email2FA as Email, keys } from "../app.js";
 
 
 
@@ -172,9 +172,11 @@ const cipherEncrypt = async (string) => {
     const cipher = crypto.createCipheriv("aes256", key, iv);
     let encrypted = cipher.update(string, "utf-8", "base64");
     encrypted += cipher.final("base64");
+    const keyString = key.toString("base64")
     return {
         encrypted,
-        symmetricKey: key.toString("base64"),
+        symmetricKey: keyString,
+        key: keyString,
         iv: iv.toString("base64")
     };
 }
@@ -299,6 +301,40 @@ const send2FARequest = async (email, code) => {
     };
 };
 
+const decryptLongText = async (text, key, iv, privateKey) => {
+    const decryptedKey = decryptMessage(key, privateKey);
+    const decryptedIv = decryptMessage(iv, privateKey);
+    const keyArray = decryptedKey.split(",").map(Number);
+    const ivArray = decryptedIv.split(",").map(Number);
+    const importedKey = await crypto.subtle.importKey(
+        "raw",
+        new Uint8Array(keyArray),
+        {
+            name: "AES-CBC"
+        },
+        true,
+        ["decrypt"]
+    );
+
+    const decipher = crypto.createDecipheriv("aes-256-cbc", importedKey, new Uint8Array(ivArray));
+    let decrypted = decipher.update(text, "base64", "utf-8");
+    decrypted += decipher.final("utf-8");
+
+    return decrypted.toString();
+};
+
+const encryptLongText = async (text) => {
+    return await cipherEncrypt(text);
+};
+
+const decryptBase64 = async (base64, key, iv, privateKey) => {
+    return await decryptLongText(base64, key, iv, privateKey);
+};
+
+const encryptBase64 = async (base64) => {
+    return await encryptLongText(base64);
+};
+
 
 
 export default {
@@ -314,7 +350,11 @@ export default {
     getPublicInfo,
     getFile,
     getRandomInt,
-    send2FARequest
+    send2FARequest,
+    decryptLongText,
+    encryptLongText,
+    decryptBase64,
+    encryptBase64
 };
 
 export {
@@ -330,5 +370,9 @@ export {
     getPublicInfo,
     getFile,
     getRandomInt,
-    send2FARequest
+    send2FARequest,
+    decryptLongText,
+    encryptLongText,
+    decryptBase64,
+    encryptBase64
 };

@@ -137,5 +137,5 @@ _Notes.txt
 .vscode/
 Start Server.bat
 database/backup/
-.hintrc
+*.hintrc
 uploads/

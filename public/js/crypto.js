@@ -234,6 +234,65 @@ class Crypto {
 
         return decryptedInput;
     }
+
+    async encryptLongText(text) {
+        // Create a random key and iv
+        const iv = window.crypto.getRandomValues(new Uint8Array(16));
+        const key = await window.crypto.subtle.generateKey(
+            {
+                name: "AES-CBC",
+                length: 256
+            },
+            true,
+            ["encrypt", "decrypt"]
+        );
+
+        // Encrypt the text with the key and iv
+        const encoder = new TextEncoder();
+        const encodedMessage = encoder.encode(text);
+        const encryptedText = await window.crypto.subtle.encrypt(
+            {
+                name: "AES-CBC",
+                iv
+            },
+            key,
+            encodedMessage
+        );
+
+        // Export the key
+        const exportedKey = new Uint8Array(await window.crypto.subtle.exportKey("raw", key));
+
+        // Encrypt the key and iv with the public key
+        const encryptedIv = await this.clientEncrypt(iv);
+        const encryptedKey = await this.clientEncrypt(exportedKey);
+
+        // Return the encrypted text, key and iv
+        return {
+            data: this.arrayBufferToBase64(encryptedText),
+            key: encryptedKey,
+            iv: encryptedIv
+        };
+    }
+    
+    async decryptLongText(text, key, iv) {
+        // Decrypt the key and iv with the private key
+        const decryptedKey = await this.clientDecrypt(key);
+        const decryptedIv = await this.clientDecrypt(iv);
+
+        // Decrypt the text with the key and iv
+        const decryptedText = await this.cipherDecrypt(text, decryptedKey, decryptedIv);
+
+        // Return the decrypted text
+        return decryptedText;
+    }
+    
+    async encryptBase64(base64) {
+        return await this.encryptLongText(base64);
+    }
+    
+    async decryptBase64(base64, key, iv) {
+        return await this.decryptLongText(base64, key, iv);
+    }
 }
 
 

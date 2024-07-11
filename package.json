@@ -1,6 +1,6 @@
 {
   "name": "chat-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "This is a chat app for my final project. The goal is to create a chat app that has end-to-end encryption an where you can send and view 3d-models.",
   "main": "app.js",

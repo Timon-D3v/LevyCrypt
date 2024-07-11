@@ -28,13 +28,22 @@ window.sessionStorage.setItem("client_privateKey", JSON.stringify(keys.privateKe
 getElm("send-image").click(async e => {
     e.preventDefault();
 
-    const file = getElm("image-file");
+    sendFile(getElm("image-file"), "image");
+});
+
+async function sendFile(input, type) {
+    const name = input.file().name;
+    const base64 = await input.getImgBase64();
+    const data = await crypto.encryptBase64(base64);
+    const to = new URLSearchParams(window.location.search).get("email");
+
     const res = await post("/upload", {
         from: user.email,
-        to: new URLSearchParams(window.location.search).get("email"),
-        type: "image",
-        name: file.file().name,
-        base64: await file.getImgBase64()
+        to,
+        type,
+        name,
+        data
     });
+
     console.log(res);
-})
+}

@@ -39,7 +39,6 @@ router.post("/verifyCode", async (req, res) => {
 
     try {
         const { email, code } = req.body;
-        console.log(req.body);
 
         if (req.session.auth.code_2fa === code && req.session.auth.email === email) {
             req.session.auth.needs2FA = false;
