@@ -1,7 +1,6 @@
 import crypto from "./crypto.js";
 import functions from "./functions.js";
-import user from "user";
-import timon, { post, getElm, getQuery, ORIGIN } from "timonjs";
+import timon, { post, getElm, getQuery } from "timonjs";
 
 
 
@@ -25,25 +24,7 @@ window.sessionStorage.setItem("client_privateKey", JSON.stringify(keys.privateKe
 
 
 // Event Listeners
-getElm("send-image").click(async e => {
+getElm("send-image").click(e => {
     e.preventDefault();
-
-    sendFile(getElm("image-file"), "image");
+    functions.sendImage(getElm("image-file"));
 });
-
-async function sendFile(input, type) {
-    const name = input.file().name;
-    const base64 = await input.getImgBase64();
-    const data = await crypto.encryptBase64(base64);
-    const to = new URLSearchParams(window.location.search).get("email");
-
-    const res = await post("/upload", {
-        from: user.email,
-        to,
-        type,
-        name,
-        data
-    });
-
-    console.log(res);
-}

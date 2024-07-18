@@ -323,8 +323,15 @@ const decryptLongText = async (text, key, iv, privateKey) => {
     return decrypted.toString();
 };
 
-const encryptLongText = async (text) => {
-    return await cipherEncrypt(text);
+const encryptLongText = async (text, publicKey) => {
+    const data = await cipherEncrypt(text);
+    const encryptedKey = encryptMessage(data.key, publicKey);
+    const encryptedIv = encryptMessage(data.iv, publicKey);
+    return {
+        data: data.encrypted,
+        key: encryptedKey,
+        iv: encryptedIv
+    }
 };
 
 const decryptBase64 = async (base64, key, iv, privateKey) => {

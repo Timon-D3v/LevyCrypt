@@ -121,6 +121,7 @@ main {
     width: var(--w);
     background-color: transparent;
     opacity: 0.5;
+    z-index: 2;
 }
 
 #transition {
@@ -137,6 +138,49 @@ main {
     background-color: var(--background-50);
     transform: translateY(-100%);
 }
+
+/* Messages */
+
+main[data-barba-type="chat-container"] {
+    --p: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: var(--p);
+    padding-bottom: var(--scb);
+}
+
+.outer-message {
+    --p2: calc(var(--p) * 2);
+    color: var(--text-950);
+    max-width: 75%;
+    margin: calc(var(--p) / 2) 0;
+    padding: calc(var(--p) / 3 * 2) var(--p);
+}
+
+.user-message.outer-message {
+    align-self: flex-end;
+    background-color: var(--primary-500);
+    background: linear-gradient(90deg, var(--primary-300) 0%, var(--primary-500) 100%);
+    padding-right: var(--p2);
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--p)) var(--p), calc(100% - var(--p)) 100%, 0 100%);
+}
+
+.contact-message.outer-message {
+    background-color: var(--secondary-500);
+    background: linear-gradient(90deg, var(--secondary-500) 0%, var(--secondary-300) 100%);
+    padding-left: var(--p2);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, var(--p) 100%, var(--p) var(--p));
+}
+
+.outer-message > p.inner-message {
+    margin: 0;
+}
+
+.outer-message > img.inner-message {}
+
+.outer-message > video.inner-message {}
+
+.outer-message > canvas.inner-message {}
 
 /* Desktop */
 

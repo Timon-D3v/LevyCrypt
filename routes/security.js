@@ -14,7 +14,9 @@ router.post("/get-user-data", (req, res) => {
 });
 
 router.post("/get-public-info", async (req, res) => {
-    res.json(await getPublicInfo(req.body.email));
+    const user = await getPublicInfo(req.body.email);
+    if (user?.online) user.publicKey = "This is a placeholder. There should be a public key here."
+    res.json(user);
 });
 
 export default router;

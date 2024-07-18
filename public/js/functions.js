@@ -21,10 +21,7 @@ function validateEmail(email) {
  * @param {string} password - The password of the user trying to log in.
  */
 async function login(email, password) {
-    if (!validateEmail(email)) {
-        timon.errorField("Bitte gib eine gültige E-Mail-Adresse ein.");
-        return;
-    }
+    if (!validateEmail(email)) return timon.errorField("Bitte gib eine gültige E-Mail-Adresse ein.");
 
     const encryptedPassword = await crypto.clientEncrypt(password);
 
@@ -117,7 +114,7 @@ function displayChat(data) {
             break;
         default:
             innerElement = createElm("p");
-            innerElement.text("<i>Unsupported message type.</i>");
+            innerElement.html("<i>Unsupported message type.</i>");
             break;
     }
 
@@ -150,10 +147,14 @@ async function getPublicInfo(email) {
  * @returns {Promise<void>} - A promise that resolves when the message is sent.
  */
 async function sendMessage(data) {
+    const recipient = await currentChatPartnerInfo();
     socket.emit("send-message", {
         from: user.email,
-        to: new URLSearchParams(window.location.search).get("email"),
-        message: data
+        to: recipient.email,
+        message: data,
+        userPublicKey: getKey("client_publicKey"),
+        // If the recipient is offline, I use the sender public key that the backend can encrypt the message and throws no error.
+        recipientPublicKey: recipient?.online ? recipient.publicKey : getKey("client_publicKey")
     });
 }
 
@@ -239,6 +240,42 @@ async function check2FA() {
     }
 }
 
+function currentChatPartner() {
+    return new URLSearchParams(window.location.search).get("email");
+}
+
+async function currentChatPartnerInfo() {
+    return await getPublicInfo(currentChatPartner());
+}
+
+async function sendImage(input) {
+    const name = input.file().name;
+    const base64 = await input.getImgBase64();
+    const data = await crypto.encryptBase64(base64);
+
+    const res = await post("/upload", {
+        from: user.email,
+        to: currentChatPartner(),
+        type: "image",
+        name,
+        data
+    });
+
+    if (!res.valid) return timon.errorField(res.message);
+
+    const outerElement = createElm("div");
+    outerElement.addClass("user-message", "outer-message");
+
+    const element = createElm("img");
+    element.attribute("src", base64);
+    element.attribute("alt", name);
+    element.data("data-original-name", name);
+    element.addClass("inner-message");
+
+    outerElement.append(element);
+    getQuery("main").get(0).append(outerElement);
+}
+
 export default {
     validateEmail,
     login,
@@ -247,7 +284,10 @@ export default {
     getPublicInfo,
     sendMessage,
     initChats,
-    getKey
+    getKey,
+    currentChatPartner,
+    currentChatPartnerInfo,
+    sendImage
 };
 
 export {
@@ -258,5 +298,8 @@ export {
     getPublicInfo,
     sendMessage,
     initChats,
-    getKey
+    getKey,
+    currentChatPartner,
+    currentChatPartnerInfo,
+    sendImage
 };

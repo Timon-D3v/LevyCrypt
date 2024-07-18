@@ -1,4 +1,5 @@
 import { getElm } from "timonjs";
+import crypto from "crypto";
 import functions from "./functions.js";
 
 // Initialize Chats
@@ -10,7 +11,7 @@ const settings = {
     type: "text"
 };
 
-getElm("send").click(() => {
+getElm("send").click(async () => {
 
     const input = getElm("main-input");
 
@@ -18,7 +19,7 @@ getElm("send").click(() => {
 
     functions.sendMessage({
         type: settings.type,
-        content: input.val()
+        content: await crypto.encryptLongText(input.val())
     });
 
     input.val("");

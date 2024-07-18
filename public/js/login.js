@@ -9,7 +9,6 @@ const email = getElm("email"),
     new_password = getElm("new-password"),
     given_name = getElm("given-name"),
     family_name = getElm("family-name"),
-    picture_label = getElm("profile-picture-label"),
     picture = getElm("profile-picture");
 
 
