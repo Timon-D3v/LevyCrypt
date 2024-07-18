@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="default">
+    <head>
+        <meta charset="utf-8"><%
+        if (ENVIRONMENT === "prod") { %>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E0BP9PGK6H"></script>
+        <script type="text/javascript">
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-E0BP9PGK6H');
+        </script><% 
+        }; %>
+        <title><%= title %> | LevyCrypt</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta name="Owner" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
+        <meta name="Manager" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
+        <meta name="Developer" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
+        <meta name="Homepage" content="https://www.timondev.com">
+        <meta name="Created" content="<%= date.toString() %>">
+        <meta name="description" content="<%= desc %>">
+        <meta name="google" content="nositelinkssearchbox">
+        <meta name="robots" content="index,follow">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@firezunami">
+        <meta name="twitter:title" content="<%= title %> | LevyCrypt">
+        <meta name="twitter:description" content="<%= desc %>">
+        <meta name="twitter:image" content="/img/logo.png">
+        <meta property="og:title" content="<%= title %> | LevyCrypt">
+        <meta property="og:url" content="<%= ORIGIN + path %>">
+        <meta property="og:description" content="<%= desc %>">
+        <meta property="og:image" content="/img/logo.png">
+        <meta property="og:image:type" content="image/png">
+        <link rel="icon" type="image/ico" href="/img/logo.ico">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="/css/global.css">
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap">
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.min.js",
+                    "three/addons/": "https://cdn.jsdelivr.net/npm/three/examples/jsm/",
+                    "@barba/core": "https://cdn.jsdelivr.net/npm/@barba/core/dist/barba.mjs",
+                    "gsap": "https://cdn.skypack.dev/gsap",
+                    "timonjs": "https://cdn.jsdelivr.net/npm/timonjs/lib/timon.module.mjs",
+                    "socket.io": "https://cdn.socket.io/4.7.5/socket.io.esm.min.js",
+                    "crypto": "/js/crypto.js",
+                    "user": "/js/user.js"
+                }
+            }
+        </script>
+        <script type="module" src="/js/global.js" defer></script>
+        <script type="module" src="/js/functions.js" defer></script>
+        <script type="module" src="/js/io.js" defer></script>
+        <script type="module" src="/js/user.js" defer></script>
+        <style>
+            #model {
+                width: 100%;
+                height: 100%;
+            }
+
+            body {
+                overflow: hidden;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="model"></canvas>
+        <pre id="base64"><%= base64 %></pre>
+        <script type="module" defer>
+            import crypto from "crypto";
+            import * as THREE from "three";
+            import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+            import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+            import { post, getElm, ORIGIN } from "timonjs";
+
+
+
+            const encrypted = JSON.parse(getElm("base64").text());
+
+            // Get the base64 string from the pre element
+            const base64 = await crypto.decryptLongText(encrypted.data, encrypted.key, encrypted.iv);
+
+            // Convert the base64 string to a blob
+            const base64toBlob = async (base64, contentType = "", sliceSize = 512) => {
+                const byteCharacters = await atob(base64);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+                    
+                const blob = new Blob(byteArrays, {type: contentType});
+                return blob;
+            };
+
+            const contentType = base64.split(";")[0].split(":")[1];
+
+            // Create Blob object
+            const blob = await base64toBlob(base64.split(",")[1], contentType);
+            console.log(blob);
+
+            const url = URL.createObjectURL(blob);
+
+
+
+            /**
+             THREE.js part
+             This part needs a url for the model to load.
+             */
+
+            /**
+             * Creates a new Three.js scene with a camera and renderer.
+             */
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({canvas: getElm("model"), antialias: true, alpha: true});
+
+            /**
+             * Sets the pixel ratio, auto clear, clear color, and size of the renderer.
+             */
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.autoClear = false;
+            renderer.setClearColor(0x000000, 0.0);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            /**
+             * Positioning the camera
+             */
+            camera.position.z = 5;
+
+            /**
+             * Add light to the scene.
+             * The 0xfaf9f6 refers to the hex color #faf9f6.
+             * This color is called Off White.
+             */
+            const light = new THREE.AmbientLight(0xfaf9f6, 1000);
+            scene.add(light);
+
+            /**
+             * Create a new instance of the OrbitControls class and sets the target of the controls to the scene.
+             */
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.target = scene.position;
+            controls.update();
+
+            /**
+             * Load the model
+             */
+            const loader = new GLTFLoader();
+            loader.load(url, obj => {
+                scene.add(obj.scene);
+            });
+
+            /**
+             * Renders the scene
+             */
+            function animate() {
+                // Create a smooth animation loop
+                requestAnimationFrame(animate);
+
+                // Update the controls
+                controls.update();
+
+                // Render the scene using the renderer
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            /**
+             * This function is triggered when the window is resized. It updates the camera's aspect ratio and projection matrix,
+             * sets the renderer's size to match the window dimensions, and clears the renderer.
+             */
+            window.addEventListener("resize", () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.clear();
+            });
+        </script>
+    </body>
+</html>

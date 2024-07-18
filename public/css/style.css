@@ -180,7 +180,19 @@ main[data-barba-type="chat-container"] {
 
 .outer-message > video.inner-message {}
 
-.outer-message > canvas.inner-message {}
+.outer-message > iframe.inner-message {
+    width: 100%;
+    height: 50vh;
+    border: none;
+    outline: none;
+    resize: vertical;
+    max-height: 100vh;
+    min-height: 10vh;
+}
+
+.outer-message:has( > iframe.inner-message) {
+    width: 75%;
+}
 
 /* Desktop */
 

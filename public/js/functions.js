@@ -110,7 +110,7 @@ function displayChat(data) {
             break;
         case "3d":
             innerElement = createElm("iframe");
-            innerElement.attribute("src", data.message.content);
+            innerElement.attribute("src", data.message.url);
             break;
         default:
             innerElement = createElm("p");
@@ -126,7 +126,8 @@ function displayChat(data) {
 async function displayImage(data, element) {
     const res = await fetch(data.url, { method: "GET" });
     const { response } = await res.json();
-    element.attribute("src", response.base64);
+    const base64 = await crypto.decryptBase64(response.base64.data, response.base64.key, response.base64.iv);
+    element.attribute("src", base64);
     element.attribute("alt", data.name);
 }
 
@@ -276,6 +277,42 @@ async function sendImage(input) {
     getQuery("main").get(0).append(outerElement);
 }
 
+function send3D(input) {
+    const name = input.file().name;
+    const reader = new FileReader();
+
+    reader.onerror = e => {
+        timon.errorField(`File could not be read: ${e.target.error.code}`);
+    };
+
+    reader.onload = async e => {
+        const base64 = e.target.result;
+        const data = await crypto.encryptBase64(base64);
+        const res = await post("/upload", {
+            from: user.email,
+            to: currentChatPartner(),
+            type: "3d",
+            name,
+            data
+        });
+
+        if (!res.valid) return timon.errorField(res.message);
+
+        const outerElement = createElm("div");
+        outerElement.addClass("user-message", "outer-message");
+
+        const element = createElm("iframe");
+        element.attribute("src", res.url);
+        element.data("data-original-name", name);
+        element.addClass("inner-message");
+
+        outerElement.append(element);
+        getQuery("main").get(0).append(outerElement);
+    };
+
+    reader.readAsDataURL(input.file());
+}
+
 export default {
     validateEmail,
     login,
@@ -287,7 +324,8 @@ export default {
     getKey,
     currentChatPartner,
     currentChatPartnerInfo,
-    sendImage
+    sendImage,
+    send3D
 };
 
 export {
@@ -301,5 +339,6 @@ export {
     getKey,
     currentChatPartner,
     currentChatPartnerInfo,
-    sendImage
+    sendImage,
+    send3D
 };

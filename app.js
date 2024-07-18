@@ -20,6 +20,7 @@ import Email from "./components/email.js";
 import routeRoot from "./routes/root.js";
 import routeAuth from "./routes/auth.js";
 import routeChat from "./routes/chat.js";
+import routeModels from "./routes/models.js";
 import routeUpload from "./routes/upload.js";
 import routeSecurity from "./routes/security.js";
 
@@ -131,6 +132,7 @@ app.use(cors());
 app.use("/", routeRoot);
 app.use("/auth", routeAuth);
 app.use("/chat", routeChat);
+app.use("/models", routeModels);
 app.use("/upload", routeUpload);
 app.use("/security", routeSecurity);
 

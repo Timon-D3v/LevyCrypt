@@ -28,3 +28,8 @@ getElm("send-image").click(e => {
     e.preventDefault();
     functions.sendImage(getElm("image-file"));
 });
+
+getElm("send-3d").click(e => {
+    e.preventDefault();
+    functions.send3D(getElm("3d-file"));
+});

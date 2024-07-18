@@ -338,8 +338,8 @@ const decryptBase64 = async (base64, key, iv, privateKey) => {
     return await decryptLongText(base64, key, iv, privateKey);
 };
 
-const encryptBase64 = async (base64) => {
-    return await encryptLongText(base64);
+const encryptBase64 = async (base64, publicKey) => {
+    return await encryptLongText(base64, publicKey);
 };
 
 
