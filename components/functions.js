@@ -56,6 +56,12 @@ const imagekitUpload = async (base64, name, folder) => {
   }
 };
 
+/**
+ * Imports a JWK (JSON Web Key) as a cryptographic key.
+ * @param {Object} key - The JWK to import.
+ * @param {boolean} [isPrivateKey=false] - Indicates whether the key is a private key.
+ * @returns {Promise<CryptoKey>} - A promise that resolves to the imported key.
+ */
 const importJWK = async (key, isPrivateKey = false) => {
     return await crypto.subtle.importKey(
         "jwk",
@@ -166,6 +172,11 @@ const encryptMessage = (message, publicKey) => {
     return Array.from(new Uint8Array(encryptedData));
 }
 
+/**
+ * Encrypts a string using AES-256 encryption algorithm.
+ * @param {string} string - The string to be encrypted.
+ * @returns {Promise<Object>} - An object containing the encrypted string, symmetric key, key, and initialization vector (IV).
+ */
 const cipherEncrypt = async (string) => {
     const key = crypto.randomBytes(32);
     const iv = crypto.randomBytes(16);
@@ -247,6 +258,13 @@ const getPublicInfo = async (email) => {
     }
 };
 
+/**
+ * Retrieves a file from the database.
+ *
+ * @param {string} user - The user requesting the file.
+ * @param {string} filename - The name of the file to retrieve.
+ * @returns {Promise<Object>} - A promise that resolves to the retrieved file object or an error object.
+ */
 const getFile = async (user, filename) => {
     try {
         const response = await db.getFile(filename);
@@ -266,6 +284,13 @@ const getFile = async (user, filename) => {
     }
 };
 
+/**
+ * Generates a random integer between the specified minimum and maximum values (inclusive).
+ *
+ * @param {number} min - The minimum value of the range.
+ * @param {number} max - The maximum value of the range.
+ * @returns {number} - A random integer between the specified minimum and maximum values.
+ */
 const getRandomInt = (min, max) => {
     const range = max - min + 1;
     const maxUint32 = 0xFFFFFFFF;
@@ -277,6 +302,12 @@ const getRandomInt = (min, max) => {
     return min + (randomInt % range);
 };
 
+/**
+ * Sends a 2FA request email to the specified email address.
+ * @param {string} email - The recipient's email address.
+ * @param {string} code - The 2FA code to be included in the email.
+ * @returns {Promise<any>} - A promise that resolves to the response from the email service.
+ */
 const send2FARequest = async (email, code) => {
     try {
         const { HTMLPart, TextPart } = new Email(code);
@@ -301,6 +332,15 @@ const send2FARequest = async (email, code) => {
     };
 };
 
+/**
+ * Decrypts a long text using AES-CBC encryption.
+ *
+ * @param {string} text - The encrypted text to decrypt.
+ * @param {string} key - The encrypted key used for decryption.
+ * @param {string} iv - The encrypted initialization vector used for decryption.
+ * @param {string} privateKey - The private key used for decryption.
+ * @returns {Promise<string>} - The decrypted text.
+ */
 const decryptLongText = async (text, key, iv, privateKey) => {
     const decryptedKey = decryptMessage(key, privateKey);
     const decryptedIv = decryptMessage(iv, privateKey);
@@ -323,6 +363,13 @@ const decryptLongText = async (text, key, iv, privateKey) => {
     return decrypted.toString();
 };
 
+/**
+ * Encrypts a long text using the provided public key.
+ *
+ * @param {string} text - The text to be encrypted.
+ * @param {string} publicKey - The public key used for encryption.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing the encrypted data, key, and iv.
+ */
 const encryptLongText = async (text, publicKey) => {
     const data = await cipherEncrypt(text);
     const encryptedKey = encryptMessage(data.key, publicKey);
@@ -334,10 +381,25 @@ const encryptLongText = async (text, publicKey) => {
     }
 };
 
+/**
+ * Decrypts a base64-encoded string using the provided key, initialization vector (iv), and private key.
+ * @param {string} base64 - The base64-encoded string to decrypt.
+ * @param {string} key - The encryption key.
+ * @param {string} iv - The initialization vector (iv).
+ * @param {string} privateKey - The private key.
+ * @returns {Promise<string>} - A promise that resolves to the decrypted string.
+ */
 const decryptBase64 = async (base64, key, iv, privateKey) => {
     return await decryptLongText(base64, key, iv, privateKey);
 };
 
+/**
+ * Encrypts a base64 string using the provided public key.
+ *
+ * @param {string} base64 - The base64 string to encrypt.
+ * @param {string} publicKey - The public key used for encryption.
+ * @returns {Promise<string>} - A promise that resolves to the encrypted string.
+ */
 const encryptBase64 = async (base64, publicKey) => {
     return await encryptLongText(base64, publicKey);
 };

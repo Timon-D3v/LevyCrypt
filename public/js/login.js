@@ -29,15 +29,13 @@ getElm("sign-up-btn").click(() => {
         new_password.valIsEmpty() ||
         given_name.valIsEmpty() ||
         family_name.valIsEmpty()
-    ) {
-        timon.errorField("Bitte gib alle nötigen Angaben ein, um einen Account zu erstellen.");
-    } else {
-        functions.signUp(
-            new_email.val(),
-            new_password.val(),
-            given_name.val(),
-            family_name.val(),
-            picture
-        );
-    }
+    ) return timon.errorField("Bitte gib alle nötigen Angaben ein, um einen Account zu erstellen.");
+    
+    functions.signUp(
+        new_email.val(),
+        new_password.val(),
+        given_name.val(),
+        family_name.val(),
+        picture
+    );
 });

@@ -176,9 +176,10 @@ main[data-barba-type="chat-container"] {
     margin: 0;
 }
 
-.outer-message > img.inner-message {}
-
-.outer-message > video.inner-message {}
+.outer-message > img.inner-message {
+    max-height: 65vh;
+    max-width: 100%;
+}
 
 .outer-message > iframe.inner-message {
     width: 100%;

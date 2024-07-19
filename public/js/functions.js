@@ -123,6 +123,14 @@ function displayChat(data) {
     getQuery("main").get(0).append(outerElement);
 }
 
+/**
+ * Displays an image on the specified element.
+ * @param {Object} data - The image data.
+ * @param {string} data.url - The URL of the image.
+ * @param {string} data.name - The name of the image.
+ * @param {HTMLElement} element - The element to display the image on.
+ * @returns {Promise<void>} - A promise that resolves when the image is displayed.
+ */
 async function displayImage(data, element) {
     const res = await fetch(data.url, { method: "GET" });
     const { response } = await res.json();
@@ -159,6 +167,11 @@ async function sendMessage(data) {
     });
 }
 
+/**
+ * Initializes the chats by decrypting the chat history and displaying it on the page.
+ * 
+ * @returns {Promise<void>} A promise that resolves when the chat history is initialized.
+ */
 async function initChats() {
     const encrypted = getElm("history").text();
     const encryptedKey = getElm("symmetricKey").text();
@@ -182,13 +195,24 @@ async function initChats() {
     main.scrollTo({
         top: main.scrollHeight,
         behavior: "smooth"
-    })
+    });
 }
 
+/**
+ * Retrieves the value associated with the given key from the session storage.
+ * @param {string} type - The key to retrieve the value for.
+ * @returns {*} - The value associated with the given key, or null if the key does not exist.
+ */
 function getKey(type) {
     return JSON.parse(window.sessionStorage.getItem(type));
 }
 
+/**
+ * Initializes the 2-Faktor-Authentifizierung (2FA) process.
+ * Sends a verification code to the user and creates the necessary form elements for code input and verification.
+ * Hides the login and sign-up sections and appends the form to the authentication wrapper.
+ * @returns {Promise<void>} A promise that resolves when the initialization is complete.
+ */
 async function init2Fa() {
     const res = await post("/auth/2fa/sendCode");
 
@@ -227,6 +251,10 @@ async function init2Fa() {
     wrapper.append(form);
 }
 
+/**
+ * Checks the 2FA code entered by the user and performs the necessary actions based on the result.
+ * @returns {Promise<void>} A promise that resolves when the code is verified.
+ */
 async function check2FA() {
     const code = getElm("auth-code-input");
     const email = getElm("email");
@@ -241,14 +269,27 @@ async function check2FA() {
     }
 }
 
+/**
+ * Retrieves the current chat partner's email from the URL parameters.
+ * @returns {string|null} The email of the current chat partner, or null if not found.
+ */
 function currentChatPartner() {
     return new URLSearchParams(window.location.search).get("email");
 }
 
+/**
+ * Retrieves the public information of the current chat partner.
+ * @returns {Promise<Object>} A promise that resolves to the public information of the current chat partner.
+ */
 async function currentChatPartnerInfo() {
     return await getPublicInfo(currentChatPartner());
 }
 
+/**
+ * Sends an image to the server for uploading and displays it in the chat window.
+ * @param {Input} input - The input object containing the image file.
+ * @returns {Promise<void>} - A promise that resolves when the image is sent and displayed successfully.
+ */
 async function sendImage(input) {
     const name = input.file().name;
     const base64 = await input.getImgBase64();
@@ -277,6 +318,10 @@ async function sendImage(input) {
     getQuery("main").get(0).append(outerElement);
 }
 
+/**
+ * Sends a 3D file to the server for uploading and displays it in the chat window.
+ * @param {File} input - The input file to be sent.
+ */
 function send3D(input) {
     const name = input.file().name;
     const reader = new FileReader();

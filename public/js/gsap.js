@@ -1,5 +1,8 @@
 import gsap from "gsap";
 
+/**
+ * Animates the page transition by sliding it out from the top.
+ */
 function pageOut() {
     gsap.set("#transition", {
         translateY: "-100%",
@@ -12,6 +15,9 @@ function pageOut() {
     });
 }
 
+/**
+ * Animates the page transition by sliding it in from the bottom.
+ */
 function pageIn() {
     gsap.set("#transition", {
         translateY: 0,

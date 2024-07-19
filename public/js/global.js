@@ -1,6 +1,6 @@
 import crypto from "./crypto.js";
 import functions from "./functions.js";
-import timon, { post, getElm, getQuery } from "timonjs";
+import { post, getElm } from "timonjs";
 
 
 

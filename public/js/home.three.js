@@ -1,13 +1,13 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import timon, { ORIGIN } from "timonjs";
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { getElm, ORIGIN } from "timonjs";
 
 /**
  * Creates a new Three.js scene with a camera and renderer.
  */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({canvas: timon.getElm("threejs-bg"), antialias: true, alpha: true});
+const renderer = new THREE.WebGLRenderer({canvas: getElm("threejs-bg"), antialias: true, alpha: true});
 
 /**
  * Sets the pixel ratio, auto clear, clear color, and size of the renderer.
