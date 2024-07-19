@@ -6,7 +6,7 @@ import gsap from "gsap";
 function pageOut() {
     gsap.set("#transition", {
         translateY: "-100%",
-        backgroundColor: "white"
+        backgroundColor: "var(--background-50)"
     });
     gsap.to("#transition", {
         duration: 0.5,
@@ -21,7 +21,7 @@ function pageOut() {
 function pageIn() {
     gsap.set("#transition", {
         translateY: 0,
-        backgroundColor: "white"
+        backgroundColor: "var(--background-50)"
     });
     gsap.to("#transition", {
         duration: 0.5,

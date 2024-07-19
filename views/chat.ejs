@@ -1,9 +1,3 @@
-<% if (chat.open === false) { %>
-<script>
-    window.location.href = "/chat?email=max.mustermann@timondev.com";
-</script>
-<% } else { %>
-
 <!DOCTYPE html>
 <html lang="de-ch" data-theme="default">
     <%- include("./snippets/head.ejs", {
@@ -47,8 +41,3 @@
         <div id="transition"></div>
     </body>
 </html>
-
-
-
-
-<% } %>

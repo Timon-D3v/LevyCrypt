@@ -1,26 +1,23 @@
-import { getElm } from "timonjs";
-import crypto from "crypto";
-import functions from "./functions.js";
+import { getElm, on } from "timonjs";
+import { sendHandler, initChats } from "./functions.js";
 
 // Initialize Chats
-if (window.location.pathname === "/chat") functions.initChats();
+if (window.location.pathname === "/chat") initChats();
 
 
 
-const settings = {
-    type: "text"
-};
-
-getElm("send").click(async () => {
-
+// Event Listeners
+getElm("send").click(sendHandler);
+on(document, "keydown", e => {
     const input = getElm("main-input");
+    const element = document.activeElement;
+    if (e.key === "Enter" && input === element) sendHandler();
+});
 
-    if (input.valIsEmpty()) return;
+getElm("show-file-menu").click(() => {
+    getElm("file-menu").toggleClass("invisible");
+});
 
-    functions.sendMessage({
-        type: settings.type,
-        content: await crypto.encryptLongText(input.val())
-    });
-
-    input.val("");
+getElm("close-file-menu").click(() => {
+    getElm("file-menu").toggleClass("invisible");
 });

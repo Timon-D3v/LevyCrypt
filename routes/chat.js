@@ -33,7 +33,6 @@ router.get("/", async (req, res) => {
                 iv: await functions.encryptMessage(iv, userPublicKey)
             };
             chat.open = true;
-            //console.log(functions.decryptMessage(chat.security.symmetricKey, req.session.user.privateKey));
         } catch (err) {
             console.error(err);
             chat.open = false;

@@ -67,7 +67,7 @@ async function signUp(email, password, name, family_name, picture_element) {
         name,
         family_name,
         picture,
-        publicKey: window.sessionStorage.getItem("client_publicKey")
+        publicKey: getKey("client_publicKey")
     });
 
     if (res.valid) {
@@ -362,6 +362,24 @@ function send3D(input) {
     reader.readAsDataURL(input.file());
 }
 
+/**
+ * Handles the send button click event.
+ * Sends a text message to the server after encrypting the input value.
+ * @returns {Promise<void>} A promise that resolves when the message is sent.
+ */
+async function sendHandler() {
+    const input = getElm("main-input");
+
+    if (input.valIsEmpty()) return;
+
+    sendMessage({
+        type: "text",
+        content: await crypto.encryptLongText(input.val())
+    });
+
+    input.val("");
+}
+
 export default {
     validateEmail,
     login,
@@ -374,7 +392,8 @@ export default {
     currentChatPartner,
     currentChatPartnerInfo,
     sendImage,
-    send3D
+    send3D,
+    sendHandler
 };
 
 export {
@@ -389,5 +408,6 @@ export {
     currentChatPartner,
     currentChatPartnerInfo,
     sendImage,
-    send3D
+    send3D,
+    sendHandler
 };

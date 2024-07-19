@@ -575,6 +575,12 @@ button {
     cursor: pointer;
 }
 
+input {
+    font-family: "Tilitium Web", sans-serif;
+    color: var(--text-950);
+    background-color: var(--background-50);
+}
+
 a {
     text-decoration: none;
     cursor: pointer;

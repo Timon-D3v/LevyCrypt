@@ -23,6 +23,7 @@ router.post("/login", async (req, res) => {
             req.session.auth.publicKey = publicKey;
             req.session.auth.needs2FA = true;
             req.session.auth.needsPassword = false;
+            req.session.auth.signUp = false;
             
             delete req.session.auth.password;
             delete req.session.auth.id;
@@ -54,21 +55,21 @@ router.post("/signUp", async (req, res) => {
             return res.json({message: "Dieser Benutzername ist schon vergeben, bitte such dir einen anderen aus.", valid: false});
         }
 
-        const decryptedPassword = functions.decryptMessage(password, keys.privateKey);
-        const valid = await functions.signUp(email, decryptedPassword, name, family_name, picture);
-        if (valid) {
-            req.session.auth = await getAccountWithEmail(email);
-            req.session.auth.needs2FA = true;
-            req.session.auth.needsPassword = false;
-            req.session.auth.publicKey = publicKey;
+        const decryptedPassword = functions.decryptMessage(password, await functions.importJWK(keys.privateKey, true));
 
-            delete req.session.auth.password;
-            delete req.session.auth.id;
-
-            res.json({message: "Dein Account wurde erfolgreich erstellt.", valid: true});
-        } else {
-            res.json({message: "Dein Account konnte nicht erstellt werden, bitte überprüfe deine Angaben und versuche es erneut.", valid: false});
+        req.session.auth = {
+            email,
+            name,
+            family_name,
+            picture,
+            decryptedPassword,
+            publicKey,
+            needs2FA: true,
+            needsPassword: false,
+            signUp: true
         };
+
+        res.json({message: "Dein Account wurde erfolgreich erstellt.", valid: true});
     } catch (err) {
         console.error(err.message);
         res.json({message: err.message, valid: false});
