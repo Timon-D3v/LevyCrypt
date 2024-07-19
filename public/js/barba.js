@@ -1,34 +1,34 @@
 import barba from "@barba/core";
-import { initChats } from "./functions.js";
+import { initChats, currentChatPartnerInfo } from "./functions.js";
 import * as animations from "./gsap.js";
+import { getElm } from "timonjs";
 
 barba.init({
+    debug: false,
     schema: {
-        prefix: "data-barba-type",
         wrapper: "wrapper",
         container: "chat-container",
     },
     views: [{
         namespace: "chat",
-        beforeEnter() {
-            // update the menu based on user navigation
-            menu.update();
-        },
-        afterEnter() {
-            // This function is not called yet: Look out
-            console.log("Hey")
+        async afterEnter() {
+            const { email, name, family_name, picture } = await currentChatPartnerInfo();
+            const img = getElm("contact-profile-picture");
+
+            getElm("contact-name").text(`${name} ${family_name}`);
+            getElm("profile-picture").attribute("href", `/chat?email=${email}`);
+            img.attribute("src", picture);
+            img.attribute("alt", `${name}'s Profilbild`);
+            img.attribute("title", `${name} ${family_name}`);
+
             initChats();
         }
     }],
     transitions: [{
         name: "default-transition",
         leave(data) {
-            // create your stunning leave animation here
             animations.pageOut();
-            setTimeout(animations.pageIn, 500);
-        },
-        enter(data) {
-            // create your amazing enter animation here
+            setTimeout(animations.pageIn, 1000);
         }
     }]
 });

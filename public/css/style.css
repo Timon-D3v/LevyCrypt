@@ -141,7 +141,7 @@ main {
 
 /* Messages */
 
-main[data-barba-type="chat-container"] {
+main[data-barba="chat-container"] {
     --p: 12px;
     display: flex;
     flex-direction: column;
@@ -165,11 +165,21 @@ main[data-barba-type="chat-container"] {
     clip-path: polygon(0 0, 100% 0, calc(100% - var(--p)) var(--p), calc(100% - var(--p)) 100%, 0 100%);
 }
 
+.user-message.outer-message::selection,
+.user-message.outer-message > *::selection {
+    background-color: var(--accent-400);
+}
+
 .contact-message.outer-message {
     background-color: var(--secondary-500);
     background: linear-gradient(90deg, var(--secondary-500) 0%, var(--secondary-300) 100%);
     padding-left: var(--p2);
     clip-path: polygon(0 0, 100% 0, 100% 100%, var(--p) 100%, var(--p) var(--p));
+}
+
+.contact-message.outer-message::selection,
+.contact-message.outer-message > *::selection {
+    background-color: var(--primary-500);
 }
 
 .outer-message > p.inner-message {

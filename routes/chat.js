@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 
     if (typeof req.query?.email === "string") {
         try {
-            const { email } = req.query;console.log(email);
+            const { email } = req.query;
             const userPublicKey = await functions.importJWK(req.session.user.publicKey);
             const publicInfo = await functions.getPublicInfo(email);
             const chatHistory = await getChatHistory(req.session.user.email, email);

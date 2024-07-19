@@ -4,7 +4,7 @@
     <div id="header-contact"><% 
         const contact = chat.publicInfo;
         const full_name = contact.name + " " + contact.family_name;%>
-        <a class="profile-picture" href="/chat?email=<%= contact.email || "''" %>">
+        <a class="profile-picture" id="profile-picture" href="/chat?email=<%= contact.email || "''" %>">
             <img id="contact-profile-picture" src="<%= contact.picture %>" alt="<%= contact.name %>'s Profilbild" title="<%= full_name %>">
         </a>
         <h1 id="contact-name" title="<%= full_name %>"><%= full_name %></h1>

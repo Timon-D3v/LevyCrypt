@@ -1,6 +1,6 @@
 import timon, { post, getElm, getQuery, createElm } from "timonjs";
 import socket from "./io.js";
-import  crypto from "./crypto.js";
+import crypto from "crypto";
 import user from "user";
 
 /**
@@ -173,9 +173,13 @@ async function sendMessage(data) {
  * @returns {Promise<void>} A promise that resolves when the chat history is initialized.
  */
 async function initChats() {
-    const encrypted = getElm("history").text();
-    const encryptedKey = getElm("symmetricKey").text();
-    const encryptedIv = getElm("iv").text();
+    const element = getElm("history");
+    const keyElement = getElm("symmetricKey");
+    const ivElement = getElm("iv");
+
+    const encrypted = element.text();
+    const encryptedKey = keyElement.text();
+    const encryptedIv = ivElement.text();
     const main = getQuery("main").get(0);
 
     const keyArray = encryptedKey.split(",").map(Number);
@@ -186,9 +190,9 @@ async function initChats() {
     const decrypted = await crypto.cipherDecrypt(encrypted, key, iv);
     const history = JSON.parse(decrypted);
 
-    getElm("history").remove();
-    getElm("symmetricKey").remove();
-    getElm("iv").remove();
+    element.remove();
+    keyElement.remove();
+    ivElement.remove();
 
     history.forEach(element => displayChat(element));
 
