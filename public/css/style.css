@@ -246,7 +246,38 @@ main {
 }
 
 #file-menu > button:not([id="close-file-menu"]) {
-    background-color: red;
+    color: var(--secondary-500);
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 2px solid var(--secondary-500);
+    padding: 10px 20px;
+    font-size: 17px;
+    font-weight: bold;
+    background: var(--background-50-75);
+    position: relative;
+    transition: all 1s;
+    overflow: hidden;
+}
+
+#file-menu > button:not([id="close-file-menu"]):hover {
+    color: var(--background-950);
+}
+
+#file-menu > button:not([id="close-file-menu"])::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    top: 0;
+    left: -40px;
+    transform: skewX(45deg);
+    background-color: var(--secondary-500);
+    z-index: -1;
+    transition: all 1s;
+}
+
+#file-menu > button:not([id="close-file-menu"]):hover::before {
+    width: 160%;
 }
 
 #send-image {
@@ -263,14 +294,18 @@ main {
     border: none;
     outline: none;
     border-radius: 50%;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 10vh;
 }
 
 #close-file-menu > img {
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: cover;
     box-sizing: border-box;
     border-radius: 50%;
+    aspect-ratio: 1 / 1;
 }
 
 /* Messages */
@@ -305,6 +340,7 @@ main[data-barba="chat-container"] {
 }
 
 .contact-message.outer-message {
+    align-self: flex-start;
     background-color: var(--secondary-500);
     background: linear-gradient(90deg, var(--secondary-500) 0%, var(--secondary-300) 100%);
     padding-left: var(--p2);
@@ -415,7 +451,29 @@ main[data-barba="chat-container"] {
     #contact-name {
         --font-size: 30px;
         --lh: 1;
-    }   
+    }
+
+    #file-menu {
+        grid-template-columns: 1fr 30vw 30vw 1fr;
+        grid-template-rows: 1fr 3fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    #file-menu > label:nth-child(1) {
+        grid-area: 2 / 2 / 3 / 3;
+    }
+    
+    #file-menu > label:nth-child(2) {
+        grid-area: 2 / 3 / 3 / 4;
+    }
+    
+    #send-3d {
+        grid-area: 4 / 3 / 5 / 4;
+    }
+    
+    #close-file-menu {
+        grid-area: 6 / 2 / 7 / 4;
+        max-height: 15vh;
+    }
 }
 
 @media screen and (max-width: 260px) {

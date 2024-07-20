@@ -320,6 +320,8 @@ async function sendImage(input) {
 
     outerElement.append(element);
     getQuery("main").get(0).append(outerElement);
+
+    getElm("file-menu").toggleClass("invisible");
 }
 
 /**
@@ -357,6 +359,8 @@ function send3D(input) {
 
         outerElement.append(element);
         getQuery("main").get(0).append(outerElement);
+
+        getElm("file-menu").toggleClass("invisible");
     };
 
     reader.readAsDataURL(input.file());

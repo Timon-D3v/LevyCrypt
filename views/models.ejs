@@ -109,7 +109,6 @@
 
             // Create Blob object
             const blob = await base64toBlob(base64.split(",")[1], contentType);
-            console.log(blob);
 
             const url = URL.createObjectURL(blob);
 

@@ -1,9 +1,6 @@
 import { getElm, on } from "timonjs";
 import { sendHandler, initChats } from "./functions.js";
 
-// Initialize Chats
-if (window.location.pathname === "/chat") initChats();
-
 
 
 // Event Listeners

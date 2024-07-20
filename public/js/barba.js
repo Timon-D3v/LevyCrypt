@@ -1,7 +1,7 @@
 import barba from "@barba/core";
 import { initChats, currentChatPartnerInfo } from "./functions.js";
 import * as animations from "./gsap.js";
-import { getElm } from "timonjs";
+import { getElm, getQuery } from "timonjs";
 
 barba.init({
     debug: false,
@@ -23,10 +23,15 @@ barba.init({
 
             initChats();
         }
+    }, {
+        namespace: "empty-chat",
+        afterEnter() {
+            getQuery("main").get(0).html("");
+        }
     }],
     transitions: [{
         name: "default-transition",
-        leave(data) {
+        leave() {
             animations.pageOut();
             setTimeout(animations.pageIn, 1000);
         }
