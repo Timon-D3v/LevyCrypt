@@ -266,11 +266,13 @@ async function check2FA() {
     const res = await post("/auth/2fa/verifyCode", {
         code: code.val(),
         email: email.valIsEmpty() ? getElm("new-email").val() : email.val()});
-    if (res.valid) {
-        window.location.href += "chat";
-    } else {
-        timon.errorField(res.message);
-    }
+    if (!res.valid) return timon.errorField(res.message);
+
+    socket.emit("verification", {
+        email: email.valIsEmpty() ? getElm("new-email").val() : email.val(),
+        publicKey: getKey("client_publicKey")
+    });
+    window.location.href += "chat";
 }
 
 /**

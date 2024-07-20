@@ -1,5 +1,6 @@
 import barba from "@barba/core";
-import { initChats, currentChatPartnerInfo } from "./functions.js";
+import socket from "./io.js";
+import { initChats, currentChatPartnerInfo, currentChatPartner } from "./functions.js";
 import * as animations from "./gsap.js";
 import { getElm, getQuery } from "timonjs";
 
@@ -11,6 +12,9 @@ barba.init({
     },
     views: [{
         namespace: "chat",
+        beforeLeave() {
+            socket.emit("leave-room", currentChatPartner());
+        },
         async afterEnter() {
             const { email, name, family_name, picture } = await currentChatPartnerInfo();
             const img = getElm("contact-profile-picture");
@@ -22,6 +26,8 @@ barba.init({
             img.attribute("title", `${name} ${family_name}`);
 
             initChats();
+
+            socket.emit("join-room", email);
         }
     }, {
         namespace: "empty-chat",

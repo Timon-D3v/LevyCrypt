@@ -1,16 +1,56 @@
+import { createHash } from "crypto";
 import { saveChat } from "../database/database.js";
 import { decryptLongText, importJWK, encryptLongText } from "./functions.js";
 import { keys } from "../app.js";
 
 const ioConnect = socket => {
-    // After connection
-    console.log("Connected with id: " + socket.id)
+    const user = { verified: false };
 
-    socket.on("disconnect", socket => {
-        console.log("Disconnected");
+    socket.once("verification", data => {
+        user.verified = true;
+        user.email = data.email;
+        user.publicKey = data.publicKey;
+
+        const hash = createHash("sha256");
+        hash.update(data.email);
+        const room = hash.digest("hex");
+
+        socket.join(room);
+        user.rooms = {
+            self: room,
+            public: undefined
+        };
+    });
+
+    socket.on("join-room", email => {
+
+        if (!user.verified) return;
+
+        const hash = createHash("sha256");
+        hash.update(email);
+        const room = hash.digest("hex");
+        socket.join(room);
+        user.rooms.public = room;
+    });
+
+    socket.on("leave-room", email => {
+
+        if (!user.verified) return;
+
+        const hash = createHash("sha256");
+        hash.update(email);
+        const room = hash.digest("hex");
+        socket.leave(room);
+        user.rooms.public = undefined;
+    });
+
+    socket.on("disconnect", () => {
+        user.verified = false;
     });
 
     socket.on("send-message", async message => {
+
+        if (!user.verified) return;
 
         // Decrypt the message
         const { data, key, iv } = message.message.content;
@@ -33,6 +73,8 @@ const ioConnect = socket => {
 
         // Send the message to the receiver (and sender)
         socket.emit("incoming-message", message);
+        
+        if (user.rooms.public !== undefined) socket.to(user.rooms.public).emit("incoming-message", message);
     });
 };
 
