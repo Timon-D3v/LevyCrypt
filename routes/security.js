@@ -1,6 +1,7 @@
 import express from "express";
-import { keys } from "../app.js";
+import { keys, onlineUsers } from "../app.js";
 import { getPublicInfo } from "../components/functions.js";
+import { element } from "three/examples/jsm/nodes/Nodes.js";
 
 const router = express.Router();
 
@@ -15,7 +16,12 @@ router.post("/get-user-data", (req, res) => {
 
 router.post("/get-public-info", async (req, res) => {
     const user = await getPublicInfo(req.body.email);
-    if (user?.online) user.publicKey = "This is a placeholder. There should be a public key here."
+    user.online = false;
+    onlineUsers.forEach(element => {
+        if (element.email !== user.email) return;
+        user.publicKey = element.publicKey;
+        user.online = true;
+    });
     res.json(user);
 });
 

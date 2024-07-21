@@ -10,8 +10,6 @@ if (user.valid) {
         email: user.email,
         publicKey: getKey("client_publicKey")
     });
-
-    socket.emit("join-room", user.email);
 }
 
 socket.on("incoming-message", async message => {

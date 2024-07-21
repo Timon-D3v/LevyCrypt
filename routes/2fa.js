@@ -1,5 +1,6 @@
 import express from "express";
 import functions from "../components/functions.js";
+import { onlineUsers } from "../app.js";
 
 const router = express.Router();
 
@@ -49,7 +50,13 @@ router.post("/verifyCode", async (req, res) => {
             delete req.session.user.needs2FA;
             delete req.session.user.needsPassword;
 
-            if (!req.session.auth.signUp) return res.json({message: "Erfolgreich verifiziert.", valid: true});
+            if (!req.session.auth.signUp) {
+                onlineUsers.push({
+                    email: req.session.user.email,
+                    publicKey: req.session.user.publicKey
+                });
+                return res.json({message: "Erfolgreich verifiziert.", valid: true});
+            }
 
             const { email, decryptedPassword, name, family_name, picture } = req.session.auth;
             const valid = await functions.signUp(email, decryptedPassword, name, family_name, picture);
@@ -58,6 +65,11 @@ router.post("/verifyCode", async (req, res) => {
 
             delete req.session.auth.signUp;
             delete req.session.auth.decryptedPassword;
+
+            onlineUsers.push({
+                email: req.session.user.email,
+                publicKey: req.session.user.publicKey
+            });
 
             res.json({message: "Erfolgreich verifiziert und registriert.", valid: true});
         } else {

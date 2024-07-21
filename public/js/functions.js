@@ -163,7 +163,7 @@ async function sendMessage(data) {
         message: data,
         userPublicKey: getKey("client_publicKey"),
         // If the recipient is offline, I use the sender public key that the backend can encrypt the message and throws no error.
-        recipientPublicKey: recipient?.online ? recipient.publicKey : getKey("client_publicKey")
+        recipientPublicKey: recipient.online ? recipient.publicKey : getKey("client_publicKey")
     });
 }
 
