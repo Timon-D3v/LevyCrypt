@@ -120,7 +120,14 @@ function displayChat(data) {
 
     innerElement.addClass("inner-message");
     outerElement.append(innerElement);
-    getQuery("main").get(0).append(outerElement);
+    
+    const main = getQuery("main").get(0);
+    main.append(outerElement);
+
+    main.scrollTo({
+        top: main.scrollHeight,
+        behavior: "smooth"
+    });
 }
 
 /**

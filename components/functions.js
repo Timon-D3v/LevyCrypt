@@ -7,7 +7,7 @@ import db from "../database/database.js";
 import { randomString } from "timonjs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { Email2FA as Email, keys } from "../app.js";
+import { Email2FA as Email } from "../app.js";
 
 
 

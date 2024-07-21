@@ -1,5 +1,6 @@
 import express from "express";
-import { keys } from "../app.js";
+import { createHash } from "crypto";
+import { keys, io } from "../app.js";
 import { randomString } from "timonjs";
 import { getFile, decryptBase64, importJWK, encryptBase64 } from "../components/functions.js";
 import { saveChat, saveFile } from "../database/database.js";
@@ -22,10 +23,28 @@ router.post("/", async (req, res) => {
         const result = await saveChat(from, to, { type, name, url });
 
         if (result && index) {
-            res.json({ message: "Datei erfolgreich hochgeladen.", valid: true, url });
-        } else {
-            res.status(500).json({ message: "Etwas hat nicht geklappt. Versuche es in ein paar Sekunden erneut.", valid: false });
+
+            const toHash = createHash("sha256");
+            const fromHash = createHash("sha256");
+            toHash.update(to);
+            fromHash.update(from);
+            const room1 = toHash.digest("hex");
+            const room2 = fromHash.digest("hex");
+
+            for (let [id, socket] of io.sockets.sockets) {
+                if (socket.rooms.has(room1) && socket.rooms.has(room2)) {
+                    socket.emit(type === "3d" ? "incoming-model" : "incoming-image", {
+                        from,
+                        to,
+                        name,
+                        url
+                    });
+                }
+            }
+            return res.json({ message: "Datei erfolgreich hochgeladen.", valid: true, url });
         }
+        
+        res.status(500).json({ message: "Etwas hat nicht geklappt. Versuche es in ein paar Sekunden erneut.", valid: false });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Etwas hat nicht geklappt. Versuche es in ein paar Sekunden erneut.", valid: false });
@@ -38,13 +57,13 @@ router.get("/:name", async (req, res) => {
 
     const response = await getFile(req.session.user.email, req.params.name);
 
+    if (!response.valid) return res.status(400).end();
+
     const encrypted = await encryptBase64(response.base64, await importJWK(req.session.user.publicKey));
 
     response.base64 = encrypted;
 
-    if (response) return res.json({ response });
-    
-    res.status(400).end();
+    res.json({ response });
 });
 
 export default router;

@@ -37,4 +37,33 @@ socket.on("incoming-message", async message => {
     });
 });
 
+socket.on("incoming-image", data => {
+    // Check if the message is from the user
+    if (data.from === user.email) return;
+
+    displayChat({
+        from: data.from,
+        to: data.to,
+        message: {
+            type: "image",
+            url: data.url,
+            name: data.name
+        }
+    });
+});
+
+socket.on("incoming-model", data => {
+    // Check if the message is from the user
+    if (data.from === user.email) return;
+
+    displayChat({
+        from: data.from,
+        to: data.to,
+        message: {
+            type: "3d",
+            url: data.url
+        }
+    });
+});
+
 export default socket;
