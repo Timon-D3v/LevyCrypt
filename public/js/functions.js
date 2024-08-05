@@ -23,6 +23,8 @@ function validateEmail(email) {
 async function login(email, password) {
     if (!validateEmail(email)) return timon.errorField("Bitte gib eine gültige E-Mail-Adresse ein.");
 
+    getQuery(".auth-button").forEach(button => button.disabled = true);
+
     const encryptedPassword = await crypto.clientEncrypt(password);
 
     const res = await post("/auth/login", {
@@ -52,6 +54,8 @@ async function signUp(email, password, name, family_name, picture_element) {
         timon.errorField("Bitte gib eine gültige E-Mail-Adresse ein.");
         return;
     }
+
+    getQuery(".auth-button").forEach(button => button.disabled = true);
     
     let picture = "";
     try {
@@ -393,6 +397,174 @@ async function sendHandler() {
     input.val("");
 }
 
+/**
+ * Initializes the navigation by retrieving encrypted messages and decrypting them.
+ * @returns {Promise<void>} A promise that resolves when the navigation is initialized.
+ */
+async function initNav() {
+    const { encrypted } = await post("/security/get-nav-messages");
+
+    const decrypted = await crypto.decryptLongText(encrypted.data, encrypted.key, encrypted.iv);
+
+    const data = JSON.parse(decrypted);
+
+    getElm("nav").html("");
+
+    data.forEach(message => {
+        displayNavMessage(message);
+    });
+}
+
+/**
+ * Displays a navigation message based on the provided data.
+ * 
+ * @param {Object} data - The data object containing the message details.
+ * @returns {Promise<void>} - A promise that resolves once the navigation message is displayed.
+ */
+async function displayNavMessage(data) {
+    const outerElement = createElm("a");
+    outerElement.addClass("nav-element");
+
+    const isFromUser = data.from === user.email;
+    const contact = await getPublicInfo(isFromUser ? data.to : data.from);
+
+    outerElement.attribute("href", `/chat?email=${contact.email}`);
+
+    const innerElement = createElm("p");
+    innerElement.addClass("nav-message");
+
+    const messageStart = isFromUser ? "You: " : `${contact.name}: `;
+
+    switch (data.message.type) {
+        case "text":
+            innerElement.html(messageStart + data.message.content);
+            break;
+        case "image":
+            innerElement.html(`${messageStart}Bild (${data.message.name})`);
+            break;
+        case "video":
+            innerElement.html(`${messageStart}Video (${data.message.name})`);
+            break;
+        case "file":
+            innerElement.html(`${messageStart}Datei (${data.message.name})`);
+            break;
+        case "3d":
+            innerElement.html(`${messageStart}3D-Modell`);
+            break;
+        default:
+            innerElement.html("<i>Unsupported message type.</i>");
+            break;
+    }
+
+    const img = createElm("img");
+    img.addClass("nav-picture");
+    img.attribute("src", contact.picture);
+    img.attribute("alt", contact.name + "'s Profilbild");
+    img.attribute("title", contact.name + " " + contact.family_name);
+
+    const h3 = createElm("h3");
+    h3.addClass("nav-name");
+    h3.text(contact.name + " " + contact.family_name);
+
+    const div = createElm("div");
+    div.addClass("nav-info");
+
+    div.append(h3, innerElement);
+    outerElement.append(img, div);
+    
+    getElm("nav").append(outerElement);
+}
+
+/**
+ * Initializes a new chat window and is called by barba.js when the chat namespace is entered.
+ * 
+ * @returns {Promise<void>} A promise that resolves when the chat namespace is initialized.
+ */
+async function namespaceChat() {
+    const { email, name, family_name, picture } = await currentChatPartnerInfo();
+    const img = getElm("contact-profile-picture");
+
+    getElm("contact-name").text(`${name} ${family_name}`);
+    getElm("profile-picture").attribute("href", `/chat?email=${email}`);
+    img.attribute("src", picture);
+    img.attribute("alt", `${name}'s Profilbild`);
+    img.attribute("title", `${name} ${family_name}`);
+
+    initChats();
+    initNav();
+
+    socket.emit("join-room", email);
+
+    getElm("send").click(sendHandler);
+
+    getElm("show-file-menu").click(() => {
+        getElm("file-menu").toggleClass("invisible");
+    });
+}
+
+/**
+ * Updates the navigation.
+ */
+function updateNav() {
+    initNav();
+}
+
+/**
+ * Updates the search results based on the input value.
+ * 
+ * @returns {Promise<void>} A promise that resolves when the search results are updated.
+ */
+async function updateSearch() {
+    const input = getElm("search");
+
+    if (input.valIsEmpty() || input.val().trim() === "") return;
+
+    const { data } = await post("/security/get-users-where", {input: input.val().trim()});
+    const list = getElm("search-results");
+
+    list.html("");
+
+    data.forEach(element => displaySearchResult(element));
+}
+
+/**
+ * Displays a search result element in the navigation.
+ * 
+ * @param {Object} element - The search result element.
+ * @param {string} element.email - The email of the element.
+ * @param {string} element.picture - The picture URL of the element.
+ * @param {string} element.name - The name of the element.
+ * @param {string} element.family_name - The family name of the element.
+ */
+function displaySearchResult(element) {
+    const outerElement = createElm("a");
+    outerElement.addClass("nav-element");
+
+    outerElement.attribute("href", `/chat?email=${element.email}`);
+
+    const innerElement = createElm("p");
+    innerElement.addClass("nav-message");
+    innerElement.html(element.email);
+
+    const img = createElm("img");
+    img.addClass("nav-picture");
+    img.attribute("src", element.picture);
+    img.attribute("alt", element.name + "'s Profilbild");
+    img.attribute("title", element.name + " " + element.family_name);
+
+    const h3 = createElm("h3");
+    h3.addClass("nav-name");
+    h3.text(element.name + " " + element.family_name);
+
+    const div = createElm("div");
+    div.addClass("nav-info");
+
+    div.append(h3, innerElement);
+    outerElement.append(img, div);
+
+    list.append(outerElement);
+};
+
 export default {
     validateEmail,
     login,
@@ -406,7 +578,13 @@ export default {
     currentChatPartnerInfo,
     sendImage,
     send3D,
-    sendHandler
+    sendHandler,
+    initNav,
+    displayNavMessage,
+    namespaceChat,
+    updateNav,
+    updateSearch,
+    displaySearchResult
 };
 
 export {
@@ -422,5 +600,11 @@ export {
     currentChatPartnerInfo,
     sendImage,
     send3D,
-    sendHandler
+    sendHandler,
+    initNav,
+    displayNavMessage,
+    namespaceChat,
+    updateNav,
+    updateSearch,
+    displaySearchResult
 };

@@ -601,6 +601,10 @@ img {
     background-repeat: no-repeat;
     background-size: cover;
     shape-margin: 0.75rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 pre {

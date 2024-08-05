@@ -3,6 +3,11 @@ import { saveChat } from "../database/database.js";
 import { decryptLongText, importJWK, encryptLongText } from "./functions.js";
 import { keys } from "../app.js";
 
+/**
+ * Connects the socket to the server and handles various events such as verification, joining/leaving rooms, sending/receiving messages.
+ * 
+ * @param {Socket} socket - The socket object for the connection.
+ */
 const ioConnect = socket => {
     const user = { verified: false };
 

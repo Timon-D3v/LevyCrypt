@@ -1,7 +1,7 @@
 import express from "express";
 import { keys, onlineUsers } from "../app.js";
-import { getPublicInfo } from "../components/functions.js";
-import { element } from "three/examples/jsm/nodes/Nodes.js";
+import { getPublicInfo, getAllChatPartners, getLastMessages, encryptLongText, importJWK } from "../components/functions.js";
+import { searchForUsers } from "../database/database.js";
 
 const router = express.Router();
 
@@ -23,6 +23,27 @@ router.post("/get-public-info", async (req, res) => {
         user.online = true;
     });
     res.json(user);
+});
+
+router.post("/get-nav-messages", async (req, res) => {
+
+    if (req?.session?.user?.valid !== true) return res.status(401).redirect("/");
+
+    const { email, publicKey } = req.session.user;
+    
+    const partners = await getAllChatPartners(email);
+
+    const messages = await getLastMessages(email, partners);
+
+    const encrypted = await encryptLongText(JSON.stringify(messages), await importJWK(publicKey));
+
+    res.json({ encrypted });
+});
+
+router.post("/get-users-where", async (req, res) => {
+    const { input } = req.body;
+    const data = await searchForUsers(input);
+    res.json({ data });
 });
 
 export default router;

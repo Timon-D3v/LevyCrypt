@@ -28,7 +28,6 @@ main {
     min-height: calc(100% - var(--header-height) * 2 - 10%);
     border: 1px solid rgba(255, 255, 255, 0.63);
     border-radius: 20px;
-    background: #ecf1f91a;
     box-sizing: border-box;
     padding: 20px;
     box-shadow: 0 4px 30px #ecf1f91a;

@@ -1,5 +1,14 @@
+/*!
+ * timon.js
+ * Copyright(c) 2024 Timon Fiedler
+ * MIT Licensed
+ */
+
 /**
  * This class creates my own crypto module.
+ *
+ * @class Crypto
+ * @typedef {Crypto}
  */
 class Crypto {
 
@@ -235,6 +244,12 @@ class Crypto {
         return decryptedInput;
     }
 
+    /**
+     * Encrypts a long text using AES-CBC encryption.
+     * 
+     * @param {string} text - The text to be encrypted.
+     * @returns {Promise<Object>} - A promise that resolves to an object containing the encrypted text, key, and iv.
+     */
     async encryptLongText(text) {
         // Create a random key and iv
         const iv = window.crypto.getRandomValues(new Uint8Array(16));
@@ -274,6 +289,14 @@ class Crypto {
         };
     }
     
+    /**
+     * Decrypts a long text using the provided key and initialization vector (IV).
+     *
+     * @param {string} text - The encrypted text to be decrypted.
+     * @param {string} key - The key used for decryption.
+     * @param {string} iv - The initialization vector used for decryption.
+     * @returns {Promise<string>} The decrypted text.
+     */
     async decryptLongText(text, key, iv) {
         // Decrypt the key and iv with the private key
         const decryptedKey = await this.clientDecrypt(key);
@@ -286,10 +309,24 @@ class Crypto {
         return decryptedText;
     }
     
+    /**
+     * Encrypts a base64 string.
+     *
+     * @param {string} base64 - The base64 string to encrypt.
+     * @returns {Promise<string>} - A promise that resolves to the encrypted base64 string.
+     */
     async encryptBase64(base64) {
         return await this.encryptLongText(base64);
     }
     
+    /**
+     * Decrypts a base64-encoded string using the specified key and initialization vector (IV).
+     *
+     * @param {string} base64 - The base64-encoded string to decrypt.
+     * @param {string} key - The key used for decryption.
+     * @param {string} iv - The initialization vector (IV) used for decryption.
+     * @returns {Promise<string>} - A promise that resolves to the decrypted string.
+     */
     async decryptBase64(base64, key, iv) {
         return await this.decryptLongText(base64, key, iv);
     }

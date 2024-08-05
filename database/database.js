@@ -78,6 +78,11 @@ const getAllEmails = async () => {
     }
 };
 
+/**
+ * Retrieves an account from the database based on the provided email.
+ * @param {string} email - The email of the account to retrieve.
+ * @returns {Promise<Object>} - A promise that resolves to the retrieved account object, or an error object if an error occurs.
+ */
 const getAccountWithEmail = async (email) => {
     try {
         const [ result ] = await pool.query(
@@ -93,6 +98,14 @@ const getAccountWithEmail = async (email) => {
     }
 };
 
+/**
+ * Retrieves the chat history between two users.
+ *
+ * @param {string} user_email - The email of the user initiating the chat.
+ * @param {string} contact_email - The email of the user being contacted.
+ * @returns {Promise<Object|Array>} - The chat history between the two users.
+ * @throws {Error} - If there is an error retrieving the chat history.
+ */
 const getChatHistory = async (user_email, contact_email) => {
     try {
         const [ result ] = await pool.query(
@@ -108,6 +121,14 @@ const getChatHistory = async (user_email, contact_email) => {
     }
 };
 
+/**
+ * Saves a chat message to the database.
+ * 
+ * @param {string} from - The sender of the message.
+ * @param {string} to - The recipient of the message.
+ * @param {object} message - The message object to be saved.
+ * @returns {boolean} - Returns true if the chat message is successfully saved, false otherwise.
+ */
 const saveChat = async (from, to, message) => {
     try {
         await pool.query(
@@ -121,6 +142,15 @@ const saveChat = async (from, to, message) => {
     }
 };
 
+/**
+ * Saves a file to the database.
+ *
+ * @param {string} from - The sender of the file.
+ * @param {string} to - The recipient of the file.
+ * @param {string} filename - The name of the file.
+ * @param {string} base64 - The base64 encoded content of the file.
+ * @returns {boolean} - Returns true if the file was successfully saved, false otherwise.
+ */
 const saveFile = async (from, to, filename, base64) => {
     try {
         await pool.query(
@@ -134,6 +164,14 @@ const saveFile = async (from, to, filename, base64) => {
     }
 };
 
+/**
+ * Retrieves a file from the database based on the provided filename.
+ * @param {string} filename - The name of the file to retrieve.
+ * @returns {Promise<Object>} - A promise that resolves to the retrieved file object.
+ *                             The file object contains the following properties:
+ *                             - valid: A boolean indicating if the file is valid or not.
+ *                             - error: If the file is not valid, this property contains the error message.
+ */
 const getFile = async (filename) => {
     try {
         const [ result ] = await pool.query(
@@ -151,6 +189,68 @@ const getFile = async (filename) => {
     }
 };
 
+/**
+ * Retrieves all chat partners for a given email.
+ *
+ * @param {string} email - The email of the user.
+ * @returns {Promise<Array<Object>>} - A promise that resolves to an array of chat partners.
+ * @throws {Error} - If an error occurs while retrieving the chat partners.
+ */
+const getAllChatPartners = async (email) => {
+    try {
+        const [ result] = await pool.query(
+            `SELECT \`from\`, \`to\` FROM \`${schema}\`.\`chats\` WHERE (\`to\` = ?) OR (\`from\` = ?)`,
+            [email, email]
+        );
+        return result;
+    } catch (err) {
+        console.error(err.message);
+        return undefined;
+    }
+};
+
+/**
+ * Retrieves the last message between two email addresses from the database.
+ * 
+ * @param {string} email - The email address of the first user.
+ * @param {string} email2 - The email address of the second user.
+ * @returns {Object|undefined} The last message object, or undefined if an error occurred.
+ */
+const getLastMessages = async (email, email2) => {
+    try {
+        const [ result] = await pool.query(
+            `SELECT * FROM \`${schema}\`.\`chats\` WHERE (\`to\` = ? AND \`from\` = ?) OR (\`to\` = ? AND \`from\` = ?) ORDER BY \`id\` DESC LIMIT 1;`,
+            [email, email2, email2, email]
+        );
+        return result[0];
+    } catch (err) {
+        console.error(err.message);
+        return undefined;
+    }
+};
+
+/**
+ * Searches for users in the database based on a given string.
+ * @param {string} string - The string to search for.
+ * @returns {Promise<Array<Object>>} - A promise that resolves to an array of user objects matching the search criteria.
+ */
+const searchForUsers = async (string) => {
+    try {
+        const [ result ] = await pool.query(
+            `SELECT * from \`${schema}\`.\`users\` WHERE (LOWER(\`email\`) LIKE LOWER(?) OR LOWER(\`name\`) LIKE LOWER(?) OR LOWER(\`family_name\`) LIKE LOWER(?));`,
+            [`%${string}%`, `%${string}%`, `%${string}%`]
+        );
+        result.forEach(entry => {
+            delete entry.id;
+            delete entry.password;
+        })
+        return result;
+    } catch (err) {
+        console.error(err.message);
+        return undefined;
+    }
+};
+
 
 
 export default {
@@ -161,7 +261,10 @@ export default {
     getChatHistory,
     saveChat,
     saveFile,
-    getFile
+    getFile,
+    getAllChatPartners,
+    getLastMessages,
+    searchForUsers
 };
 
 export {
@@ -172,5 +275,8 @@ export {
     getChatHistory,
     saveChat,
     saveFile,
-    getFile
+    getFile,
+    getAllChatPartners,
+    getLastMessages,
+    searchForUsers
 };

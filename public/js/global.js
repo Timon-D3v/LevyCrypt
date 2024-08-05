@@ -1,6 +1,6 @@
 import crypto from "./crypto.js";
 import functions from "./functions.js";
-import { post, getElm } from "timonjs";
+import { post, getElm, getQuery } from "timonjs";
 
 
 
@@ -21,15 +21,9 @@ window.sessionStorage.setItem("server_publicKey", JSON.stringify(publicKey));
 window.sessionStorage.setItem("client_publicKey", JSON.stringify(keys.publicKey));
 window.sessionStorage.setItem("client_privateKey", JSON.stringify(keys.privateKey));
 
+getQuery("img").on("dragstart", () => false);
 
 
-// Event Listeners
-getElm("send-image").click(e => {
-    e.preventDefault();
-    functions.sendImage(getElm("image-file"));
-});
 
-getElm("send-3d").click(e => {
-    e.preventDefault();
-    functions.send3D(getElm("3d-file"));
-});
+// Event listeners
+getElm("search").on("input", functions.updateSearch);

@@ -12,7 +12,10 @@ router.post("/", async (req, res) => {
     try {
 
         if (!req.session?.user?.valid) return res.status(401).json({ message: "Du bist nicht angemeldet.", valid: false });
-        if (req.session.user.email !== req.body.from) return res.status(401).json({ message: "Du kannst keine Dateien für andere Personen hochladen.", valid: false });
+        if (req.session.user.email !== req.body.from) return res.status(401).json({
+            message: "Du kannst keine Dateien für andere Personen hochladen.",
+            valid: false
+        });
 
         const { from, to, type, name, data } = req.body;
         const base64 = await decryptBase64(data.data, data.key, data.iv, await importJWK(keys.privateKey, true));
@@ -22,29 +25,32 @@ router.post("/", async (req, res) => {
         const index = await saveFile(from, to, filename, base64);
         const result = await saveChat(from, to, { type, name, url });
 
-        if (result && index) {
+        if (!result || !index) return res.status(500).json({
+            message: "Etwas hat nicht geklappt. Versuche es in ein paar Sekunden erneut.",
+            valid: false
+        });
 
-            const toHash = createHash("sha256");
-            const fromHash = createHash("sha256");
-            toHash.update(to);
-            fromHash.update(from);
-            const room1 = toHash.digest("hex");
-            const room2 = fromHash.digest("hex");
+        const toHash = createHash("sha256");
+        const fromHash = createHash("sha256");
+        toHash.update(to);
+        fromHash.update(from);
+        const room1 = toHash.digest("hex");
+        const room2 = fromHash.digest("hex");
 
-            for (let [id, socket] of io.sockets.sockets) {
-                if (socket.rooms.has(room1) && socket.rooms.has(room2)) {
-                    socket.emit(type === "3d" ? "incoming-model" : "incoming-image", {
-                        from,
-                        to,
-                        name,
-                        url
-                    });
-                }
+        for (let [id, socket] of io.sockets.sockets) {
+            if (socket.rooms.has(room1) && socket.rooms.has(room2)) {
+                socket.emit(type === "3d" ? "incoming-model" : "incoming-image", {
+                    from,
+                    to,
+                    name,
+                    url
+                });
             }
-            return res.json({ message: "Datei erfolgreich hochgeladen.", valid: true, url });
+            if (socket.rooms.has(room1)) socket.emit("update-nav");
         }
         
-        res.status(500).json({ message: "Etwas hat nicht geklappt. Versuche es in ein paar Sekunden erneut.", valid: false });
+        res.json({ message: "Datei erfolgreich hochgeladen.", valid: true, url });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Etwas hat nicht geklappt. Versuche es in ein paar Sekunden erneut.", valid: false });

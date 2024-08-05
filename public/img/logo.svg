@@ -1,16 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="800px" height="800px" fill="none" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
- <g>
-  <text transform="scale(.03)" fill="#3007ff" font-size="42.667px" style="shape-inside:url(#rect14);white-space:pre" xml:space="preserve"/>
-  <text transform="scale(.03)" fill="#3007ff" font-size="592px" style="shape-inside:url(#rect17);white-space:pre" xml:space="preserve"/>
-  <g fill="#416fbe">
-   <path d="m2.3978 21.58 12.609 0.04134 9e-3 -3.0179-9.6419-0.03246 0.03594-12.004-3.0116-0.00902-0.044976 15.022z" stroke-width=".03"/>
-   <path d="m3.6794 5.3744-3.1833-3.0179s14.386-2.6468 19.141 2.1084c4.7552 4.7552 3.229 15.031 2.179 16.192s-5.5928 0.92369-5.5928 0.92369l-2e-6 -2.9937s2.3168 0.17441 3.1859-1.1977c0.86904-1.3721 0.72967-5.973-2.6246-9.4512-3.3542-3.4783-13.064-2.5218-13.064-2.5218z" stroke-width=".03"/>
-   <g stroke-width=".032687">
-    <circle cx="8.0822" cy="11.954" r="1.509"/>
-    <circle cx="12.029" cy="11.991" r="1.509"/>
-    <circle cx="15.889" cy="12.011" r="1.509"/>
-   </g>
-  </g>
- </g>
-</svg>
+<?xml version="1.0" encoding="UTF-8"?><svg width="800px" height="800px" fill="none" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="#416fbe"><path d="m2.3978 21.58 12.609 0.04134 9e-3 -3.0179-9.6419-0.03246 0.03594-12.004-3.0116-0.00902-0.044976 15.022z" stroke-width=".03"/><path d="m3.6794 5.3744-3.1833-3.0179s14.386-2.6468 19.141 2.1084c4.7552 4.7552 3.229 15.031 2.179 16.192s-5.5928 0.92369-5.5928 0.92369l-2e-6 -2.9937s2.3168 0.17441 3.1859-1.1977c0.86904-1.3721 0.72967-5.973-2.6246-9.4512-3.3542-3.4783-13.064-2.5218-13.064-2.5218z" stroke-width=".03"/><g stroke-width=".032687"><circle cx="8.0822" cy="11.954" r="1.509"/><circle cx="12.029" cy="11.991" r="1.509"/><circle cx="15.889" cy="12.011" r="1.509"/></g></g></svg>

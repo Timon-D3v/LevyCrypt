@@ -12,6 +12,7 @@ import { Email2FA as Email } from "../app.js";
 
 
 dotenv.config({path: path.resolve(dirname(fileURLToPath(import.meta.url)), "../.env")});
+
 const imagekit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
     privateKey: process.env.IMAGEKIT_SECRET_KEY,
@@ -404,6 +405,50 @@ const encryptBase64 = async (base64, publicKey) => {
     return await encryptLongText(base64, publicKey);
 };
 
+/**
+ * Retrieves all chat partners for a given email.
+ * 
+ * @param {string} email - The email of the user.
+ * @returns {Array<string>} - An array of chat partners' emails.
+ */
+const getAllChatPartners = async (email) => {
+    const result = await db.getAllChatPartners(email);
+
+    if (typeof result === "undefined") return [];
+
+    const partners = [];
+
+    result.forEach(partner => {
+        if (partner.from === email && !partners.includes(partner.to)) partners.push(partner.to);
+        if (partner.to === email && !partners.includes(partner.from)) partners.push(partner.from);
+    });
+
+    return partners;
+};
+
+/**
+ * Retrieves the last messages for a given email and partners.
+ * 
+ * @param {string} email - The email of the user.
+ * @param {string[]} partners - An array of partner emails.
+ * @returns {Promise<Array>} - A promise that resolves to an array of last messages.
+ */
+const getLastMessages = async (email, partners) => {
+    const result = [await db.getLastMessages(email, partners[0])];
+
+    if (typeof result === "undefined") return [];
+
+    for (let i = 1; i < partners.length; i++) {
+        const message = await db.getLastMessages(email, partners[i]);
+
+        if (typeof message === "undefined") return [];
+
+        result.push(message);
+    }
+
+    return result;
+};
+
 
 
 export default {
@@ -423,7 +468,9 @@ export default {
     decryptLongText,
     encryptLongText,
     decryptBase64,
-    encryptBase64
+    encryptBase64,
+    getAllChatPartners,
+    getLastMessages
 };
 
 export {
@@ -443,5 +490,7 @@ export {
     decryptLongText,
     encryptLongText,
     decryptBase64,
-    encryptBase64
+    encryptBase64,
+    getAllChatPartners,
+    getLastMessages
 };

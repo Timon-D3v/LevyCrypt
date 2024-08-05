@@ -1,7 +1,7 @@
 import io from "socket.io";
 import user from "user";
 import crypto from "crypto";
-import { currentChatPartner, displayChat, getKey } from "./functions.js";
+import { currentChatPartner, displayChat, getKey, updateNav } from "./functions.js";
 
 const socket = io();
 
@@ -13,6 +13,9 @@ if (user.valid) {
 }
 
 socket.on("incoming-message", async message => {
+    // Update the Navigation
+    updateNav()
+    
     // Check if the message is from the user
     let sender = false;
     if (message.from === user.email) sender = true;
@@ -65,5 +68,7 @@ socket.on("incoming-model", data => {
         }
     });
 });
+
+socket.on("update-nav", () => updateNav());
 
 export default socket;

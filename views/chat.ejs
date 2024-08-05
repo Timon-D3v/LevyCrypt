@@ -34,10 +34,25 @@
             user
         }); %><% 
         } else { %>
-        <main data-barba-type="chat-container" data-barba-namespace="empty-chat">
+        <main data-barba="chat-container" data-barba-namespace="empty-chat">
             <!-- Some pretty placeholder -->
         </main><%
         }; %>
+        <div id="file-menu" class="invisible" data-barba-prevent="all">
+            <label for="image-file" id="fallback___label-image-file">
+                <img alt="Ein Bild" title="Bild hochladen" src="/img/svg/image.svg">
+            </label>
+            <label for="3d-file" id="fallback___3d-file">
+                <img alt="Ein 3D Modell" title="3D-Modell hochladen" src="/img/svg/model.svg">
+            </label>
+            <button type="button" id="send-image">Senden</button>
+            <button type="button" id="send-3d">Senden</button>
+            <button type="button" id="close-file-menu">
+                <img alt="X" title="Menu schliessen" src="/img/svg/close.svg">
+            </button>
+            <input class="invisible" type="file" id="image-file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
+            <input class="invisible" type="file" id="3d-file" accept=".glb">
+        </div>
         <div id="transition"></div>
     </body>
 </html>

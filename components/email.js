@@ -1,3 +1,7 @@
+/**
+ * Represents an Email object.
+ * @class
+ */
 class Email {
     constructor(CODE, ORIGIN) {
         this.text1 = `Dein einmaliger 2-Faktor-Authentifizierungs-Code ist:\n\n`;

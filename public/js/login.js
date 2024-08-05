@@ -1,5 +1,5 @@
 import { getElm } from "timonjs";
-import functions from "./functions.js";
+import { login, signUp } from "./functions.js";
 
 
 
@@ -18,7 +18,7 @@ getElm("login-btn").click(() => {
     if (email.valIsEmpty() || password.valIsEmpty()) {
         timon.errorField("Bitte gib deinen Benutzername und Password ein.");
     } else {
-        functions.login(email.val(),password.val());
+        login(email.val(),password.val());
     }
 });
 
@@ -31,7 +31,7 @@ getElm("sign-up-btn").click(() => {
         family_name.valIsEmpty()
     ) return timon.errorField("Bitte gib alle nötigen Angaben ein, um einen Account zu erstellen.");
     
-    functions.signUp(
+    signUp(
         new_email.val(),
         new_password.val(),
         given_name.val(),
