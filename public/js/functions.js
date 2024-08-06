@@ -490,6 +490,7 @@ async function namespaceChat() {
     img.attribute("alt", `${name}'s Profilbild`);
     img.attribute("title", `${name} ${family_name}`);
 
+    closeMobileOptions();
     initChats();
     initNav();
 
@@ -520,9 +521,8 @@ async function updateSearch() {
     if (input.valIsEmpty() || input.val().trim() === "") return;
 
     const { data } = await post("/security/get-users-where", {input: input.val().trim()});
-    const list = getElm("search-results");
 
-    list.html("");
+    getElm("search-results").html("");
 
     data.forEach(element => displaySearchResult(element));
 }
@@ -562,8 +562,108 @@ function displaySearchResult(element) {
     div.append(h3, innerElement);
     outerElement.append(img, div);
 
-    list.append(outerElement);
-};
+    getElm("search-results").append(outerElement);
+}
+
+/**
+ * Closes the mobile options.
+ */
+function closeMobileOptions() {
+    if (window.innerWidth > 1000) return;
+
+    try {
+        getElm("mobile___options-wrapper").remove();
+    } catch (e) {
+        console.error("No mobile options wrapper found.");
+    } finally {
+        getElm("nav").removeClass("mobile___nav-active");
+        getElm("search-results").removeClass("mobile___search-results");
+        getQuery(".search").get(0).removeClass("mobile___search-container");
+    }
+}
+
+/**
+ * Opens the mobile search options.
+ */
+function openMobileSearchOptions() {
+
+    const div = createElm("div");
+    const logo = createElm("img");
+    const title = createElm("h1");
+    const close = createElm("img");
+    const results = getElm("search-results");
+    const bar = getQuery(".search").get(0);
+    
+    logo.addClass("mobile___search-logo");
+    logo.src = "/img/logo.svg";
+    logo.alt = "Logo";
+    logo.title = "LevyCrypt";
+    logo.css({
+        filter: "none"
+    });
+
+    title.addClass("mobile___search-title");
+    title.text("Suchen");
+
+    close.addClass("mobile___search-close");
+    close.src = "/img/svg/close.svg";
+    close.alt = "Schliessen";
+    close.title = "Schliessen";
+    close.css({
+        cursor: "pointer"
+    });
+    close.click(closeMobileOptions);
+
+    div.addClass("mobile___search");
+    div.id = "mobile___options-wrapper";
+    div.append(logo, title, close);
+
+    results.addClass("mobile___search-results");
+
+    bar.addClass("mobile___search-container");
+
+    getQuery("body").get(0).append(div);
+}
+
+/**
+ * Opens the mobile navigation options.
+ */
+function openMobileNavOptions() {
+
+    const div = createElm("div");
+    const logo = createElm("img");
+    const title = createElm("h1");
+    const close = createElm("img");
+    const nav = getElm("nav");
+
+    logo.addClass("mobile___chats-logo");
+    logo.src = "/img/logo.svg";
+    logo.alt = "Logo";
+    logo.title = "LevyCrypt";
+    logo.css({
+        filter: "none"
+    });
+
+    title.addClass("mobile___chats-title");
+    title.text("Chats");
+
+    close.addClass("mobile___chats-close");
+    close.src = "/img/svg/close.svg";
+    close.alt = "Schliessen";
+    close.title = "Schliessen";
+    close.css({
+        cursor: "pointer"
+    });
+    close.click(closeMobileOptions);
+
+    div.addClass("mobile___chats");
+    div.id = "mobile___options-wrapper";
+    div.append(logo, title, close);
+
+    nav.addClass("mobile___nav-active");
+
+    getQuery("body").get(0).append(div);
+}
 
 export default {
     validateEmail,
@@ -584,7 +684,10 @@ export default {
     namespaceChat,
     updateNav,
     updateSearch,
-    displaySearchResult
+    displaySearchResult,
+    closeMobileOptions,
+    openMobileSearchOptions,
+    openMobileNavOptions
 };
 
 export {
@@ -606,5 +709,8 @@ export {
     namespaceChat,
     updateNav,
     updateSearch,
-    displaySearchResult
+    displaySearchResult,
+    closeMobileOptions,
+    openMobileSearchOptions,
+    openMobileNavOptions
 };

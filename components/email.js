@@ -24,7 +24,7 @@ class Email {
                             <tr>
                               <td style="width:180px">
                                 <a href="https://timondev.com" target="_blank">
-                                  <img alt="" title="" height="auto" src="${ORIGIN}/img/logo.svg" style="border:none;display:block;outline:none;text-decoration:none;width:100%;height:auto" width="180" data-bit="iit">
+                                  <img alt="LevyCrypt Logo" title="LevyCrypt" height="180" src="${ORIGIN}/img/logo.png" style="border:none;display:block;outline:none;text-decoration:none;width:180px;height:180px" width="180" data-bit="iit">
                                 </a>
                               </td>
                             </tr>
@@ -91,13 +91,13 @@ class Email {
                       <td style="word-break:break-word;font-size:0px;padding:0px" align="center">
                         <div style="color:#8c8c8c;font-family:Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:22px">
                           <a href="https://www.instagram.com/timon.dev/" style="text-decoration:none;color:inherit;padding:0 4px" target="_blank">
-                            <img alt="Instagram Logo" src="${ORIGIN}/img/email/assets/instagram.svg" style="border:none;outline:none;text-decoration:none;height:auto" width="-22" height="auto" class="CToWUd" data-bit="iit">
+                            <img alt="Instagram Logo" src="${ORIGIN}/img/email/assets/instagram.png" style="border:none;outline:none;text-decoration:none;height:28px;width:28px" width="28" height="28" class="CToWUd" data-bit="iit">
                           </a>
                           <a href="https://github.com/Timon-D3v" style="text-decoration:none;color:inherit;padding:0 4px" target="_blank">
-                            <img alt="Github Logo" src="${ORIGIN}/img/email/assets/github.svg" style="border:none;outline:none;text-decoration:none;height:auto" width="-22" height="auto" class="CToWUd" data-bit="iit">
+                            <img alt="Github Logo" src="${ORIGIN}/img/email/assets/github.png" style="border:none;outline:none;text-decoration:none;height:28px;width:28px" width="28" height="28" class="CToWUd" data-bit="iit">
                           </a>
                           <a href="https://discordapp.com/users/560914605145325596" style="text-decoration:none;color:inherit;padding:0 4px" target="_blank">
-                            <img alt="Discord Logo" src="${ORIGIN}/img/email/assets/discord.svg" style="border:none;outline:none;text-decoration:none;height:auto" width="-22" height="auto" class="CToWUd" data-bit="iit">
+                            <img alt="Discord Logo" src="${ORIGIN}/img/email/assets/discord.png" style="border:none;outline:none;text-decoration:none;height:28px;width:28px" width="28" height="28" class="CToWUd" data-bit="iit">
                           </a>
                         </div>
                       </td>

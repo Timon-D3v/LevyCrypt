@@ -66,7 +66,9 @@ a.profile-picture {
     object-fit: cover;
 }
 
-#contact-name {
+#contact-name,
+.mobile___search-title,
+.mobile___chats-title {
     --font-size: 50px;
     --lh: 1.25;
     width: 100%;
@@ -85,6 +87,7 @@ nav {
     left: 0;
     width: var(--nav-width);
     height: var(--nav-height);
+    line-height: normal;
     background-color: var(--background-50);
     -webkit-box-shadow: var(--bs);
     box-shadow: var(--bs);
@@ -148,6 +151,7 @@ main {
 }
 
 #show-file-menu {
+    display: none;
     --d: calc(var(--h) / 3 * 2);
     width: var(--d);
     height: var(--d);
@@ -180,12 +184,14 @@ main {
 
 .main-input-wrapper {
     --m: calc(var(--h) / 6);
+    --anti-overflow: calc(100% - 58px);
     height: calc(100% - 2 * var(--m));
     margin: var(--m);
     margin-left: 0;
     flex-grow: 1;
     display: flex;
     align-items: stretch;
+    width: var(--anti-overflow);
 }
 
 #main-input,
@@ -209,12 +215,14 @@ main {
     background-color: var(--c-background-50);
     color: var(--c-text-950);
     font-weight: 500;
+    max-width: var(--anti-overflow);
 }
 
 #send {
     background-color: var(--primary-500);
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
+    min-width: 58px;
 }
 
 #send > img {
@@ -224,6 +232,7 @@ main {
     padding: 2.5%;
     margin: 0 calc(var(--h) / 5);
     box-sizing: border-box;
+    min-width: 36px;
 }
 
 #file-menu {
@@ -315,7 +324,7 @@ main {
 .nav-element {
     display: flex;
     align-items: center;
-    height: calc(var(--header-height) * 2);
+    height: calc(var(--header-height) * 1.5);
     width: 100%;
     overflow: hidden;
     color: var(--text-950);
@@ -342,11 +351,11 @@ main {
 }
 
 .nav-info {
-    --p: calc(var(--header-height) / 4);
-    --h: calc(var(--header-height) * 2 - var(--p) * 2);
+    --p: calc(var(--header-height) / 6);
+    --h: calc(var(--header-height) * 1.5 - var(--p) * 2);
     --1-3: calc(var(--h) / 3);
     height: 100%;
-    width: calc(100% - var(--header-height) * 2);
+    width: calc(100% - var(--header-height) * 1.5);
     padding: var(--p);
     padding-left: 0;
     box-sizing: border-box;
@@ -398,6 +407,7 @@ main {
     object-fit: cover;
     padding: calc(var(--h) / 5);
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .search {
@@ -436,6 +446,81 @@ main {
     left: 1rem;
     width: 1rem;
     height: 1rem;
+}
+
+.mobile___search-logo,
+.mobile___search-close,
+.mobile___chats-logo,
+.mobile___chats-close {
+    height: 100%;
+    aspect-ratio: 1/1;
+    box-sizing: border-box;
+    padding: calc(var(--header-height) / 10);
+    margin: 0 1dvw;
+    object-fit: cover;
+}
+
+.mobile___search,
+.mobile___chats {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    background-color: var(--background-50);
+    z-index: 999999;
+}
+
+#search-results.mobile___search-results {
+    display: block;
+    position: fixed;
+    top: calc(var(--header-height) * 2);
+    left: 0;
+    width: 100%;
+    height: calc(100% - var(--header-height) * 2);
+    background-color: var(--background-50);
+    z-index: 999999;
+    overflow-y: auto;
+}
+
+.search.mobile___search-container {
+    display: flex;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    margin: 0;
+    padding: 0.8rem 0;
+    background-color: var(--background-50);
+    box-sizing: border-box;
+    z-index: 999999;
+}
+
+.search.mobile___search-container > .search-icon {
+    left: 2rem;
+    width: 2rem;
+    height: 2rem;
+}
+
+.search.mobile___search-container > #search {
+    line-height: 56px;
+    padding: 0 2rem;
+    padding-left: 5rem;
+}
+
+#nav.nav.mobile___nav-active {
+    display: block;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-50);
+    isolation: isolate;
+    z-index: 999999;
 }
 
 /* Messages */
@@ -508,6 +593,19 @@ main[data-barba="chat-container"] {
 
 /* Desktop */
 
+@media screen and (min-width: 1400px) {
+
+    .nav-element {
+        height: calc(var(--header-height) * 2);
+    }
+
+    .nav-info {
+        --p: calc(var(--header-height) / 4);
+        --h: calc(var(--header-height) * 2 - var(--p) * 2);
+        width: calc(100% - var(--header-height) * 2);
+    }
+}
+
 @media screen and (min-width: 1200px) {
 
     :root {
@@ -546,6 +644,27 @@ main[data-barba="chat-container"] {
 
     .nav-three {
         display: none !important;
+    }
+
+    nav:has(
+        #search:focus,
+        #search:not(:placeholder-shown),
+        #search:focus-within
+    ) .nav,
+    #search-results {
+        display: none;
+    }
+
+    nav:has(
+        #search:focus,
+        #search:not(:placeholder-shown),
+        #search:focus-within
+    ) #search-results {
+        display: block;
+    }
+
+    #show-file-menu {
+        display: block;
     }
 }
 
@@ -588,6 +707,27 @@ main[data-barba="chat-container"] {
     .nav-three {
         display: none !important;
     }
+
+    nav:has(
+        #search:focus,
+        #search:not(:placeholder-shown),
+        #search:focus-within
+    ) .nav,
+    #search-results {
+        display: none;
+    }
+
+    nav:has(
+        #search:focus,
+        #search:not(:placeholder-shown),
+        #search:focus-within
+    ) #search-results {
+        display: block;
+    }
+
+    #show-file-menu {
+        display: block;
+    }
 }
 
 /* Tablet */
@@ -604,7 +744,9 @@ main[data-barba="chat-container"] {
 
 @media screen and (max-width: 575px) {
 
-    #contact-name {
+    #contact-name,
+    .mobile___search-title,
+    .mobile___chats-title {
         --font-size: 30px;
         --lh: 1;
     }
@@ -630,6 +772,10 @@ main[data-barba="chat-container"] {
         grid-area: 6 / 2 / 7 / 4;
         max-height: 15vh;
     }
+
+    :root {
+        font-size: 14px;
+    }
 }
 
 @media screen and (max-width: 260px) {
@@ -643,8 +789,19 @@ main[data-barba="chat-container"] {
         display: none;
     }
 
-    #contact-name {
+    #contact-name,
+    .mobile___search-title,
+    .mobile___chats-title {
         --font-size: 25px;
         --lh: 1.1;
+    }
+
+    :root {
+        font-size: 12px;
+    }
+
+    .nav-three-img {
+        padding: calc(var(--h) / 10);
+        object-fit: contain;
     }
 }

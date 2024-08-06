@@ -593,7 +593,7 @@ a, img, video, picture {
     -o-user-drag: none;
 }
 
-img {
+img, picture {
     max-width: 100%;
     height: auto;
     vertical-align: middle;

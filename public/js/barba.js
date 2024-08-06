@@ -5,7 +5,7 @@ import * as animations from "./gsap.js";
 import { getQuery } from "timonjs";
 
 barba.init({
-    debug: true,
+    debug: false,
     schema: {
         wrapper: "wrapper",
         container: "chat-container",

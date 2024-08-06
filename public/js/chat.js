@@ -1,5 +1,5 @@
 import { getElm, on } from "timonjs";
-import { sendHandler, sendImage, send3D } from "./functions.js";
+import { sendHandler, sendImage, send3D, openMobileNavOptions, openMobileSearchOptions } from "./functions.js";
 
 
 
@@ -10,9 +10,8 @@ on(document, "keydown", e => {
     if (e.key === "Enter" && input === element) sendHandler();
 });
 
-getElm("close-file-menu").click(() => {
-    getElm("file-menu").toggleClass("invisible");
-});
+getElm("mobile___show-file-menu").click(() => getElm("file-menu").toggleClass("invisible"));
+getElm("close-file-menu").click(() => getElm("file-menu").toggleClass("invisible"));
 
 getElm("send-image").click(e => {
     e.preventDefault();
@@ -23,6 +22,9 @@ getElm("send-3d").click(e => {
     e.preventDefault();
     send3D(getElm("3d-file"));
 });
+
+getElm("mobile___chats").click(openMobileNavOptions);
+getElm("mobile___search").click(openMobileSearchOptions);
 
 /**
  * Stops the event propagation.
