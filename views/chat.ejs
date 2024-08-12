@@ -34,9 +34,7 @@
             user
         }); %><% 
         } else { %>
-        <main data-barba="chat-container" data-barba-namespace="empty-chat">
-            <!-- Some pretty placeholder -->
-        </main><%
+        <main data-barba="chat-container" data-barba-namespace="empty-chat"></main><%
         }; %>
         <div id="file-menu" class="invisible" data-barba-prevent="all">
             <label for="image-file" id="fallback___label-image-file">
@@ -45,8 +43,8 @@
             <label for="3d-file" id="fallback___3d-file">
                 <img alt="Ein 3D Modell" title="3D-Modell hochladen" src="/img/svg/model.svg">
             </label>
-            <button type="button" id="send-image">Senden</button>
-            <button type="button" id="send-3d">Senden</button>
+            <button type="button" id="send-image">Bild senden</button>
+            <button type="button" id="send-3d">3D-Modell senden</button>
             <button type="button" id="close-file-menu">
                 <img alt="X" title="Menu schliessen" src="/img/svg/close.svg">
             </button>

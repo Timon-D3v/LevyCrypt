@@ -21,7 +21,7 @@ router.get("/:name", async (req, res) => {
         ENVIRONMENT: app.ENVIRONMENT,
         PORT: app.PORT,
         ORIGIN: req.protocol + "://" + req.get("host"),
-        path: req.url,
+        path: req.baseUrl + req.url,
         date: "Thu Jul 18 2024 10:48:21 GMT+0200 (Mitteleuropäische Sommerzeit)",
         title: "3d-Model",
         desc: "This site shows a 3d model",

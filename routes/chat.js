@@ -18,7 +18,6 @@ router.get("/", async (req, res) => {
             const userPublicKey = await functions.importJWK(req.session.user.publicKey);
             const publicInfo = await functions.getPublicInfo(email);
             const chatHistory = await getChatHistory(req.session.user.email, email);
-            //const roomKey = functions.getRoomKey(req.session.user.email, email);
 
             chatHistory.forEach(chat => {
                 delete chat.id;
@@ -45,7 +44,7 @@ router.get("/", async (req, res) => {
         ENVIRONMENT: app.ENVIRONMENT,
         PORT: app.PORT,
         ORIGIN: req.protocol + "://" + req.get("host"),
-        path: req.url,
+        path: req.baseUrl + req.url,
         date: "Fri May 24 2024 18:35:02 GMT+0200 (Mitteleuropäische Sommerzeit)",
         title: chat.open ? "Chat | " + chat.publicInfo.name : "Home | " + req.session.user.name,
         desc: "Hier siehst du alle deine Chats auf einem Blick.",

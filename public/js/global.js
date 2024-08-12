@@ -1,5 +1,5 @@
-import crypto from "./crypto.js";
-import functions from "./functions.js";
+import crypto from "crypto";
+import functions from "functions";
 import { post, getElm, getQuery } from "timonjs";
 
 
@@ -22,8 +22,3 @@ window.sessionStorage.setItem("client_publicKey", JSON.stringify(keys.publicKey)
 window.sessionStorage.setItem("client_privateKey", JSON.stringify(keys.privateKey));
 
 getQuery("img").on("dragstart", () => false);
-
-
-
-// Event listeners
-getElm("search").on("input", functions.updateSearch);

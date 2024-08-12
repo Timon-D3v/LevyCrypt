@@ -1,7 +1,7 @@
 import io from "socket.io";
 import user from "user";
 import crypto from "crypto";
-import { currentChatPartner, displayChat, getKey, updateNav } from "./functions.js";
+import { currentChatPartner, displayChat, getKey, updateNav } from "functions";
 
 const socket = io();
 

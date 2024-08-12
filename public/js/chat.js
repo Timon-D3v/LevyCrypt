@@ -1,5 +1,12 @@
 import { getElm, on } from "timonjs";
-import { sendHandler, sendImage, send3D, openMobileNavOptions, openMobileSearchOptions } from "./functions.js";
+import {
+	sendHandler,
+	sendImage,
+	send3D,
+	openMobileNavOptions,
+	openMobileSearchOptions,
+	updateSearch,
+} from "functions";
 
 
 
@@ -22,6 +29,8 @@ getElm("send-3d").click(e => {
     e.preventDefault();
     send3D(getElm("3d-file"));
 });
+
+getElm("search").on("input", updateSearch);
 
 getElm("mobile___chats").click(openMobileNavOptions);
 getElm("mobile___search").click(openMobileSearchOptions);

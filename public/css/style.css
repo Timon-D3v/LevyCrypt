@@ -204,6 +204,7 @@ main {
     margin: 0;
     padding: 0;
     border-radius: calc(var(--h) / 3 * 2);
+    border: 1px solid var(--c-background-950);
 }
 
 #main-input {
@@ -216,6 +217,7 @@ main {
     color: var(--c-text-950);
     font-weight: 500;
     max-width: var(--anti-overflow);
+    border-right: none;
 }
 
 #send {
@@ -223,6 +225,7 @@ main {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     min-width: 58px;
+    border-left: none;
 }
 
 #send > img {

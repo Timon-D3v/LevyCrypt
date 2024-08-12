@@ -77,6 +77,7 @@ async function signUp(email, password, name, family_name, picture_element) {
     if (res.valid) {
         init2Fa();
     } else {
+        getQuery(".auth-button").forEach(button => button.disabled = false);
         timon.errorField(res.message);
     }
 }
@@ -234,35 +235,32 @@ async function init2Fa() {
     if (!res.valid) return timon.errorField(res.message);
 
     const form = createElm("form");
-    const title = createElm("h1");
     const input = createElm("input");
     const button = createElm("button");
-    const wrapper = getQuery(".auth-wrapper").get(0);
+    const label = createElm("label");
+    const wrapper = getQuery(".auth-container").get(0);
 
-    title.addClass("auth-title", "margin-top-0");
-    title.text("2-Faktor-Authentifizierung");
-    form.append(title);
+    label.attribute("for", "auth-code-input");
+    label.text("Code");
+    label.addClass("auth-label");
 
     input.id = "auth-code-input";
     input.type = "number";
-    input.placeholder = "Code";
     input.addClass("auth-input");
-    input.css({
-        width: "100%",
-    });
-    input.min = 100000;
-    input.max = 999999;
-    form.append(input);
 
     button.id = "auth-code-button";
     button.type = "button";
     button.text("Verifizieren");
     button.addClass("auth-button");
     button.click(check2FA);
-    form.append(button);
 
-    getQuery(".login").hide();
-    getQuery(".sign-up").hide();
+    getElm("login").hide();
+    getElm("sign-up").hide();
+    getQuery(".auth-change").hide();
+
+    getQuery(".auth-title").get(0).html("2-Faktor-Authentifizierung");
+
+    form.append(label, input, button);
     wrapper.append(form);
 }
 

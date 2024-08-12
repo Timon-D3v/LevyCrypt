@@ -1,6 +1,6 @@
 import barba from "@barba/core";
 import socket from "./io.js";
-import { namespaceChat, initNav, currentChatPartner } from "./functions.js";
+import { namespaceChat, initNav, currentChatPartner } from "functions";
 import * as animations from "./gsap.js";
 import { getQuery } from "timonjs";
 

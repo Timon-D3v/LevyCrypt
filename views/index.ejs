@@ -15,36 +15,61 @@
             <a class="banner" href="/">
                 <img class="logo" src="/img/logo.svg" alt="Logo" draggable="false">
                 <div class="banner-text">LevyCrypt</div>
-            </a><%
-            if (user?.valid) { %>
-            <a class="user" href="/user">
-                <img class="profile-picture" src="<%= user.profile_picture %>" draggable="false">
-                <div class="username"></div>
-            </a><%
-            }; %>
+            </a>
         </header>
-        <main><%
-        if (user?.valid) { %>
-            <div class="chat-nav"></div><%
-        } else { %>
+        <main>
             <div class="auth-wrapper">
-                <form class="login">
-                    <h1 class="auth-title margin-top-0">Login</h1>
-                    <input type="email" id="email" autocomplete="email" class="auth-input" placeholder="E-Mail">
-                    <input type="password" id="password" autocomplete="current-password" class="auth-input" placeholder="Passwort">
-                    <button type="button" class="auth-button" id="login-btn">Einloggen</button>
-                </form>
-                <form class="sign-up">
-                    <h1 class="auth-title">Registrieren</h1>
-                    <input type="email" id="new-email" autocomplete="email" class="auth-input" placeholder="E-Mail">
-                    <input type="password" id="new-password" autocomplete="new-password" class="auth-input" placeholder="Passwort">
-                    <input type="text" id="given-name" autocomplete="given-name" class="auth-input margin-top-10" placeholder="Vorname">
-                    <input type="text" id="family-name" autocomplete="family-name" class="auth-input margin-top-10" placeholder="Nachname">
-                    <label style="display: block;" id="profile-picture-label" for="profile-picture" class="auth-input margin-top-10">Profilbild</label>
-                    <input style="display: none;" type="file" id="profile-picture" class="auth-input margin-top-10 big" placeholder="Profilbild" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
-                    <button type="button" class="auth-button" id="sign-up-btn">Registrieren</button>
-                </form>
-            </div><% }; %>
+                <div class="auth-container">
+                    <h1 class="auth-title">
+                        <span id="auth-title-log">Login</span>
+                        <span id="auth-title-reg" class="invisible">Registrieren</span>
+                    </h1>
+                    <form id="login" class="login">
+                        <div class="auth-group">
+                            <label class="auth-label" for="email">E-Mail</label>
+                            <input class="auth-input" id="email" type="email" autocomplete="email">
+                        </div>
+                        <div class="auth-group">
+                            <label class="auth-label" for="password">Passwort</label>
+                            <input class="auth-input" id="password" type="password" autocomplete="current-password">
+                        </div>
+                        <button type="button" class="auth-button" id="login-btn">Einloggen</button>
+                    </form>
+                    <form id="sign-up" class="sign-up invisible">
+                        <div class="auth-group">
+                            <label class="auth-label" for="new-email">E-Mail</label>
+                            <input class="auth-input" id="new-email" type="email" autocomplete="email">
+                        </div>
+                        <div class="auth-group">
+                            <label class="auth-label" for="new-password">Passwort</label>
+                            <input class="auth-input" id="new-password" type="password" autocomplete="new-password">
+                        </div>
+                        <div class="auth-group">
+                            <label class="auth-label" for="given-name">Vorname</label>
+                            <input class="auth-input" id="given-name" type="text" autocomplete="given-name">
+                        </div>
+                        <div class="auth-group">
+                            <label class="auth-label" for="family-name">Nachname</label>
+                            <input class="auth-input" id="family-name" type="text" autocomplete="family-name">
+                        </div>
+                        <div class="auth-group">
+                            <label class="auth-label" for="profile-picture">Profilbild</label>
+                            <label for="profile-picture">
+                                <img class="auth-picture" id="profile-picture-preview" src="/img/svg/user.svg" alt="Ein Ladebild" title="Hier könnte dein Profilbild sein">
+                            </label>
+                            <input class="invisible" id="profile-picture" type="file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
+                        </div>
+                        <button type="button" class="auth-button" id="sign-up-btn">Registrieren</button>
+                    </form>
+                    <p class="auth-change">
+                        <span>Du hast <span class="invisible" id="auth-schon">schon einen</span><span id="auth-noch">noch keinen</span> Account?</span>
+                        <span id="auth-toggler">
+                            <span id="auth-reg">Registrieren</span>
+                            <span class="invisible" id="auth-ein">Einloggen</span>
+                        </span>
+                    </p>
+                </div>
+            </div>
         </main>
         <canvas id="threejs-bg"></canvas>
         <script type="module" src="/js/home.three.js"></script>

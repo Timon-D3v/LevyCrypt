@@ -110,7 +110,7 @@
 
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: light) or (prefers-color-scheme: no-preference) {
     :root[data-theme="default"] {
         --text-50: #ecf1f9;
         --text-50-75: #ecf1f9bf;
@@ -622,14 +622,6 @@ pre {
     :root[data-theme="dark"] img[src$=".svg"] {
         filter: invert(1);
     }
-}
-
-.margin-top-0 {
-    margin-top: 0;
-}
-
-.margin-top-10 {
-    margin-top: 10px;
 }
 
 .invisible {

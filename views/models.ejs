@@ -34,9 +34,11 @@
         <link rel="icon" type="image/ico" href="/img/logo.ico">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="/css/global.css">
-        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/global.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
         <script type="importmap">
             {
                 "imports": {
@@ -44,15 +46,16 @@
                     "three/addons/": "https://cdn.jsdelivr.net/npm/three/examples/jsm/",
                     "@barba/core": "https://cdn.jsdelivr.net/npm/@barba/core/dist/barba.mjs",
                     "gsap": "https://cdn.skypack.dev/gsap",
-                    "timonjs": "https://cdn.jsdelivr.net/npm/timonjs/lib/timon.module.mjs",
+                    "timonjs": "https://cdn.jsdelivr.net/npm/timonjs@1.0.3/dist/timon.module.min.mjs",
                     "socket.io": "https://cdn.socket.io/4.7.5/socket.io.esm.min.js",
-                    "crypto": "/js/crypto.js",
-                    "user": "/js/user.js"
+                    "crypto": "/js/crypto.min.js",
+                    "user": "/js/user.js",
+                    "functions": "/js/functions.min.js"
                 }
             }
         </script>
         <script type="module" src="/js/global.js" defer></script>
-        <script type="module" src="/js/functions.js" defer></script>
+        <script type="module" src="/js/functions.min.js" defer></script>
         <script type="module" src="/js/io.js" defer></script>
         <script type="module" src="/js/user.js" defer></script>
         <style>
@@ -79,6 +82,7 @@
 
 
 
+            const canvas = getElm("model");
             const encrypted = JSON.parse(getElm("base64").text());
 
             // Get the base64 string from the pre element
@@ -124,7 +128,7 @@
              */
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({canvas: getElm("model"), antialias: true, alpha: true});
+            const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true});
 
             /**
              * Sets the pixel ratio, auto clear, clear color, and size of the renderer.
@@ -137,7 +141,7 @@
             /**
              * Positioning the camera
              */
-            camera.position.z = 5;
+            camera.position.set(0, 5, 5);
 
             /**
              * Add light to the scene.
@@ -170,7 +174,7 @@
                 requestAnimationFrame(animate);
 
                 // Update the controls
-                controls.update();
+                // controls.update();
 
                 // Render the scene using the renderer
                 renderer.render(scene, camera);
@@ -187,6 +191,20 @@
 
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.clear();
+            });
+
+            canvas.click(() => {
+                const direction = new THREE.Vector3();
+                camera.getWorldDirection(direction);
+                camera.position.add(direction);
+            });
+
+            canvas.on("mousedown", () => {
+                // Check if the right mouse button is clicked
+                if (event.button !== 2) return;
+                const direction = new THREE.Vector3();
+                camera.getWorldDirection(direction);
+                camera.position.sub(direction);
             });
         </script>
     </body>
