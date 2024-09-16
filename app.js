@@ -31,12 +31,16 @@ const ENVIRONMENT = "dev" // "prod" or "dev"
 const CERT = ENVIRONMENT === "prod" ? {
     COM: {
         key: fs.readFileSync("./cert/com/private.key.pem"),
-        cert: fs.readFileSync("./cert/com/domain.crt.pem"),
+        cert: fs.readFileSync("./cert/com/domain.crt.pem")
     },
     VIP: {
         key: fs.readFileSync("./cert/vip/private.key.pem"),
         cert: fs.readFileSync("./cert/vip/domain.cert.pem"),
-        ca: fs.readFileSync("./cert/vip/intermediate.cert.pem"),
+        ca: fs.readFileSync("./cert/vip/intermediate.cert.pem")
+    },
+    LEVY: {
+        key: fs.readFileSync("./cert/levycrypt/private.key.pem"),
+        cert: fs.readFileSync("./cert/levycrypt/certificate.crt.pem")
     }
 } : undefined;
 const PORT = ENVIRONMENT === "prod" ? 443 : 8080;
@@ -44,7 +48,16 @@ const app = express();
 const server = ENVIRONMENT === "prod" ? https.createServer(CERT.COM, app) : http.createServer(app);
 const io = new socket.Server(server, {
     cors: {
-        origin: ["https://timondev.vip", "https://localhost", "https://timondev.com", "https://www.timondev.vip", "https://www.timondev.com"],
+        origin: [
+            "https://localhost",
+            "https://127.0.0.1",
+            "https://timondev.vip",
+            "https://timondev.com",
+            "https://levycrypt.com",
+            "https://www.timondev.vip",
+            "https://www.timondev.com",
+            "https://www.levycrypt.com"
+        ]
     }
 });
 const onlineUsers = [];
@@ -54,7 +67,7 @@ const onlineUsers = [];
 // Prepare Email
 class Email2FA extends Email {
     constructor(CODE) {
-        super(CODE, ENVIRONMENT === "prod" ? "https://timondev.vip" : "http://localhost:8080");
+        super(CODE, ENVIRONMENT === "prod" ? "https://www.levycrypt.com" : "http://localhost:8080");
     }
 }
 
@@ -118,7 +131,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: ENVIRONMENT === "prod",
+        secure: false,
         maxAge: 432000000
     }
 }));
@@ -146,8 +159,10 @@ server.listen(PORT, () => {
     if (ENVIRONMENT === "prod") {
         server.addContext("timondev.vip", CERT.VIP);
         server.addContext("timondev.com", CERT.COM);
+        server.addContext("levycrypt.com", CERT.LEVY);
         server.addContext("www.timondev.vip", CERT.VIP);
         server.addContext("www.timondev.com", CERT.COM);
+        server.addContext("www.levycrypt.com", CERT.LEVY);
     }
     const protocol = ENVIRONMENT === "prod" ? "HTTPS" : "HTTP";
     console.log(`\x1b[34m%s\x1b[0m`, `${protocol} Server running on ${protocol}://localhost:${PORT}`);

@@ -9,8 +9,8 @@ void main() {
   vec4 velocity = texture2D(textureVelocity, uv);
   vec4 target = texture2D(uTarget, uv);
 
-  velocity *= 0.2;
-  velocity += (target - position) * 0.5;
+  velocity *= 0.4;
+  velocity += (target - position) * 0.8;
 
   gl_FragColor = vec4(velocity);
 }

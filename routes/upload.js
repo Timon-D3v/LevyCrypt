@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
         const { from, to, type, name, data } = req.body;
         const base64 = await decryptBase64(data.data, data.key, data.iv, await importJWK(keys.privateKey, true));
         const filename = randomString(64);
-        let url = `${req.protocol}://${req.get("host")}/upload/${filename}`;
+        let url = `/upload/${filename}`;
         if (type === "3d") url = url.replace("upload", "models");
         const index = await saveFile(from, to, filename, base64);
         const result = await saveChat(from, to, { type, name, url });

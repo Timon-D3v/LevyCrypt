@@ -14,7 +14,7 @@ if (user.valid) {
 
 socket.on("incoming-message", async message => {
     // Update the Navigation
-    updateNav()
+    updateNav();
     
     // Check if the message is from the user
     let sender = false;
@@ -70,5 +70,9 @@ socket.on("incoming-model", data => {
 });
 
 socket.on("update-nav", () => updateNav());
+
+addEventListener("beforeunload", () => {
+    socket.close();
+});
 
 export default socket;
