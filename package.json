@@ -1,11 +1,11 @@
 {
-  "name": "chat-app",
-  "version": "1.0.0",
+  "name": "levycrypt",
+  "version": "1.1.0",
   "type": "module",
   "description": "This is a chat app for my final project. The goal is to create a chat app that has end-to-end encryption an where you can send and view 3d-models.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: No test set up.\" && exit 1",
+    "start": "node app.js",
     "dev": "npx nodemon app.js"
   },
   "repository": {
@@ -18,7 +18,8 @@
     "app",
     "encryption",
     "end-to-end",
-    "3d-models"
+    "3d-models",
+    "levycrypt"
   ],
   "author": "Timon Fiedler",
   "license": "MIT",
@@ -41,6 +42,9 @@
     "node-mailjet": "^6.0.5",
     "socket.io": "4.7.5",
     "three": "^0.164.1",
-    "timonjs": "^1.0.0"
+    "timonjs": "1.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
