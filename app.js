@@ -39,13 +39,9 @@ const io = new socket.Server(server, {
             "https://localhost",
             "https://127.0.0.1",
             "https://levycrypt.timondev.com",
-            "https://levycrypt.com",
-            "https://www.levycrypt.com",
             "http://localhost",
             "http://127.0.0.1",
             "http://levycrypt.timondev.com",
-            "http://levycrypt.com",
-            "http://www.levycrypt.com"
         ]
     }
 });
@@ -56,7 +52,7 @@ const onlineUsers = [];
 // Prepare Email
 class Email2FA extends Email {
     constructor(CODE) {
-        super(CODE, ENVIRONMENT === "prod" ? "https://www.levycrypt.com" : "http://localhost:8080");
+        super(CODE, ENVIRONMENT === "prod" ? "https://levycrypt.timondev.com" : "http://localhost:8080");
     }
 }
 
@@ -110,7 +106,7 @@ app.use((req, res, next) => {
     const bind = req.get.bind(req);
     req.get = query => {
         if (query === "host") {
-            return ENVIRONMENT === "prod" ? "www.levycrypt.com" : bind("host");
+            return ENVIRONMENT === "prod" ? "levycrypt.timondev.com" : bind("host");
         }
         return bind(query);
     }

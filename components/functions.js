@@ -315,7 +315,7 @@ const send2FARequest = async (email, code) => {
         const req = await mailjet.post("send", {version: "v3.1"}).request({
             Messages: [{
                 From: {
-                    Email: "noreply@levycrypt.com",
+                    Email: "info@timondev.com",
                     Name: "LevyCrypt"
                 },
                 To: [{
