@@ -1,0 +1,27 @@
+**/node_modules
+*.env
+.env
+**/*.env
+.git/
+logs/
+database/backup/
+database/setup/
+_files/
+.vscode/
+cert/
+_guidance.txt
+_Notes.txt
+TODO.*
+*.hintrc
+Start Server.bat
+TODO.*
+_files/
+cert/
+_Notes.txt
+.vscode/
+Start Server.bat
+database/backup/
+*.hintrc
+uploads/
+*.env
+.gitignore

@@ -64,9 +64,6 @@ const gpuCompute = new GPUComputationRenderer(
     renderer
 );
 const material = new THREE.ShaderMaterial({
-    extensions: {
-        derivatives: "#extension GL_OES_standard_derivatives : enable",
-    },
     side: THREE.DoubleSide,
     uniforms: {
         time: { value: 0 },

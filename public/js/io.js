@@ -3,7 +3,7 @@ import user from "user";
 import crypto from "crypto";
 import { currentChatPartner, displayChat, getKey, updateNav } from "functions";
 
-const socket = io();
+const socket = io({ path: "/ws" });
 
 if (user.valid) {
     socket.emit("verification", {

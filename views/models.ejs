@@ -160,7 +160,19 @@
              */
             const loader = new GLTFLoader();
             loader.load(url, obj => {
-                scene.add(obj.scene);
+                const model = obj.scene;
+
+                // Compute the bounding box of the model
+                const box = new THREE.Box3().setFromObject(model);
+                const size = new THREE.Vector3();
+                box.getSize(size); // size contains width, height, and depth of the model
+
+                const height = size.y;
+
+                // Set the model's position to center it at (0, 0, 0)
+                model.position.set(0, -height / 2, 0);
+
+                scene.add(model);
             });
 
             /**

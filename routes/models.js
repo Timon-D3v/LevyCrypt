@@ -12,8 +12,8 @@ router.get("/:name", async (req, res) => {
     if (!req.session?.user?.valid) return res.status(302).redirect("/");
 
     const response = await getFile(req.session.user.email, req.params.name);
-    
-    if (!response) return res.status(400).end();
+
+    if (!response) return res.status(401).end();
 
     const encryptedBase64 = await encryptBase64(response.base64, await importJWK(req.session.user.publicKey));
 

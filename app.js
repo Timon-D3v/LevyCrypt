@@ -4,8 +4,6 @@ import bodyParser from "body-parser";
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import timon from "timonjs";
-import https from "https";
 import http from "http";
 import cors from "cors";
 import fs from "fs";
@@ -25,38 +23,29 @@ import routeUpload from "./routes/upload.js";
 import routeSecurity from "./routes/security.js";
 
 
+dotenv.config();
+
 
 // Constants 
-const ENVIRONMENT = "dev" // "prod" or "dev"
-const CERT = ENVIRONMENT === "prod" ? {
-    COM: {
-        key: fs.readFileSync("./cert/com/private.key.pem"),
-        cert: fs.readFileSync("./cert/com/domain.crt.pem")
-    },
-    VIP: {
-        key: fs.readFileSync("./cert/vip/private.key.pem"),
-        cert: fs.readFileSync("./cert/vip/domain.cert.pem"),
-        ca: fs.readFileSync("./cert/vip/intermediate.cert.pem")
-    },
-    LEVY: {
-        key: fs.readFileSync("./cert/levycrypt/private.key.pem"),
-        cert: fs.readFileSync("./cert/levycrypt/certificate.crt.pem")
-    }
-} : undefined;
-const PORT = ENVIRONMENT === "prod" ? 443 : 8080;
+const ENVIRONMENT = process.env.ENV || "dev" // "prod" or "dev"
+const PORT = process.env.PORT || 8080;
+const HOST = process.env.HOST || "localhost";
 const app = express();
-const server = ENVIRONMENT === "prod" ? https.createServer(CERT.COM, app) : http.createServer(app);
+const server = http.createServer(app);
 const io = new socket.Server(server, {
+    path: "/ws",
     cors: {
         origin: [
             "https://localhost",
             "https://127.0.0.1",
-            "https://timondev.vip",
-            "https://timondev.com",
+            "https://levycrypt.timondev.com",
             "https://levycrypt.com",
-            "https://www.timondev.vip",
-            "https://www.timondev.com",
-            "https://www.levycrypt.com"
+            "https://www.levycrypt.com",
+            "http://localhost",
+            "http://127.0.0.1",
+            "http://levycrypt.timondev.com",
+            "http://levycrypt.com",
+            "http://www.levycrypt.com"
         ]
     }
 });
@@ -100,7 +89,6 @@ export {
 
 // Configure app and dotenv
 app.set("view engine", "ejs");
-dotenv.config();
 
 
 
@@ -114,6 +102,20 @@ if (ENVIRONMENT === "prod") {
         stream: fs.createWriteStream(`./logs/log_${date}.log`, {flags: "w"})
     }));
 };
+
+
+
+// Set up for host behind proxy
+app.use((req, res, next) => {
+    const bind = req.get.bind(req);
+    req.get = query => {
+        if (query === "host") {
+            return ENVIRONMENT === "prod" ? "www.levycrypt.com" : bind("host");
+        }
+        return bind(query);
+    }
+    next();
+});
 
 
 
@@ -132,6 +134,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: { 
         secure: false,
+        httpOnly: false,
         maxAge: 432000000
     }
 }));
@@ -155,15 +158,5 @@ app.post("*", (req, res) => res.status(404).json({message: "Endpoint not found!"
 // Set up websocket
 io.on("connection", ioConnect);
 
-server.listen(PORT, () => {
-    if (ENVIRONMENT === "prod") {
-        server.addContext("timondev.vip", CERT.VIP);
-        server.addContext("timondev.com", CERT.COM);
-        server.addContext("levycrypt.com", CERT.LEVY);
-        server.addContext("www.timondev.vip", CERT.VIP);
-        server.addContext("www.timondev.com", CERT.COM);
-        server.addContext("www.levycrypt.com", CERT.LEVY);
-    }
-    const protocol = ENVIRONMENT === "prod" ? "HTTPS" : "HTTP";
-    console.log(`\x1b[34m%s\x1b[0m`, `${protocol} Server running on ${protocol}://localhost:${PORT}`);
-});
+
+server.listen(PORT, HOST, () => console.log(`App running on ${HOST}:${PORT}`));

@@ -6,7 +6,12 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "npx nodemon app.js"
+    "dev": "npx nodemon app.js",
+    "docker:build": "docker build . -t levycrypt",
+    "docker:run": "docker run --rm --name levycrypt -p 8080:8080 --env-file ./docker.env levycrypt",
+    "docker:stop": "docker stop levycrypt",
+    "docker:tag": "docker tag levycrypt timond3v/levycrypt",
+    "docker:push": "docker push timond3v/levycrypt"
   },
   "repository": {
     "type": "git",
